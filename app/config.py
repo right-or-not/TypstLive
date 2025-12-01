@@ -10,11 +10,11 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "dev-secret-key-change-in-production"
 
     # database
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'mysql+pymysql://typstliveuser:20050430#_He@localhost/typstlive_db'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'mysql+pymysql://typstliveuser:20050430#_He@localhost/typstlive_db?charset=utf8mb4'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # session lifetime
-    # PERMANENT_SESSION_LIFETIME = timedelta(days=7)
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=1)
     
     # upload file
     # max file size: 16MB

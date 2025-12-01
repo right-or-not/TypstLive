@@ -43,6 +43,63 @@ def login():
 @auth.route("/register", methods=["GET", "POST"])
 def register():
     """ User Register """
+    if current_user.is_authenticated:
+        return redirect(url_for("main.editor"))
+    
+    if request.method == "POST":
+        # get form information
+        username = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        confirm_passowrd = request.form.get("confirm_password")
+        
+        print(f"Data of Register Form: ")
+        print(f"    username: {username}")
+        print(f"    email: {email}")
+        print(f"    password: {password}")
+        print(f"    confirm_password: {confirm_passowrd}")
+        
+        # check the information
+        if not all([username, email]):
+            if not username:
+                flash("Username cannot be Empty!", "danger")
+                return render_template("auth/register.html")
+            elif not email:
+                flash("Email cannot be Empty!", "danger")
+                return render_template("auth/register.html")
+        
+        if len(password) < 6:
+            flash("Password Length too Short!", "danger")
+            return render_template("auth/register.html")
+        
+        if password != confirm_passowrd:
+            flash("Inconsistent Password Input!", "danger")
+            return render_template("auth/register.html")
+        
+        if User.query.filter_by(email=email).first():
+            flash("Email Registered!", "danger")
+            return render_template("auth/register.html")
+        
+        if User.query.filter_by(username=username).first():
+            flash("Username Occupied!", "danger")
+            return render_template("auth/register.html")
+        
+        # create new user
+        new_user = User(
+            username=username,
+            email=email,
+            password_hash=generate_password_hash(password)
+        )
+        
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash("Register Successfully! Please Login.", "success")
+            return redirect(url_for("auth.login"))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Register Failed! Please Try Again Later. {str(e)}", "danger")
+            return render_template("auth/register.html")
     
     return render_template("auth/register.html")
 
