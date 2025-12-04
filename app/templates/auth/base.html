@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypstLive - {% block title %}{% endblock %}</title>
+    <!-- link css file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="auth-container">
+        <!-- header -->
+        <div class="auth-header">
+            <div class="auth-logo">TypstLive</div>
+            <div class="auth-title">
+                {% block header %}{% endblock %}
+            </div>
+        </div>
+        
+        <!-- body: form -->
+        <div class="auth-form-box">
+            {% block form %}{% endblock %}
+        </div>
+        
+        <!-- footer: link -->
+        <div class="auth-footer">
+            {% block link %}{% endblock %}
+        </div>
+        
+        <!-- Flash info -->
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
