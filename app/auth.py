@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import timedelta
 from app import db
 from app.models import User
 
@@ -26,7 +27,7 @@ def login():
         
         # check user and password
         if user and check_password_hash(user.password_hash, password):
-            login_user(user, remember=remember)
+            login_user(user, remember=remember, duration=timedelta(minutes=1))
             flash("Login Successfully!", "success")
             return redirect(url_for("main.editor"))
         else:
@@ -106,8 +107,11 @@ def register():
 
 
 
-@auth.route("/logout")
+@auth.route("/logout", methods=["POST"])
 @login_required
 def logout():
     """ User Logout """
-    pass
+    username = current_user.username
+    logout_user()
+    flash(f'User "{username}" Logout Successfully!', "info")
+    return redirect(url_for("auth.login"))

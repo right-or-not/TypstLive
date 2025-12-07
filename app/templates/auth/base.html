@@ -29,17 +29,16 @@
         </div>
         
         <!-- Flash info -->
-        <div class="flash-messages">
+        <div class="flash-message" id="flash-message">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
+                    {% set category, message = messages[-1] %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
                 {% endif %}
             {% endwith %}
         </div>
     </div>
     
-    {% block extra_js %}{% endblock %}
+    {% block scripts %}{% endblock %}
 </body>
 </html>
