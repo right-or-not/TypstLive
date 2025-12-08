@@ -7,42 +7,44 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <!-- 页面头部 -->
+    <!-- header -->
     <header>
-        <h1>Typst 公式编译器</h1>
+        <div>
+            <span>TypstLive</span>
+            <span>{{ current_user.username }}</span>
+        </div>
         <nav>
-            <span>欢迎，{{ current_user.username }}！</span>
+            <a href="{{ url_for('main.history') }}">Compile History</a>
+            <span aria-hidden="true"> | </span>
+            <a href="{{ url_for('main.profile') }}">Edit Profile</a>
             <form action="{{ url_for('auth.logout') }}" method="post">
-                <button type="submit">退出登录</button>
+                <button type="submit">Logout</button>
             </form>
         </nav>
     </header>
     
     <hr>
     
-    <!-- 主编辑区域 -->
+    <!-- main -->
     <main>
-        <section class="editor-section">
-            <h2>编辑器</h2>
-            
+        <section class="editor-section">            
             <div class="editor-container">
-                <!-- 左侧：代码编辑器 -->
+                <!-- Input: Typst Code Editor -->
                 <article class="code-panel">
-                    <h3>Typst 代码</h3>
+                    <h3>Input Area</h3>
+                    <div class="button-group">
+                        <button type="button" id="like-btn">like</button>
+                        <button type="button" id="clear-btn">clear</button>
+                    </div>
                     <textarea 
                         id="typst-code" 
-                        placeholder="输入 Typst 公式代码，例如：$x^2 + y^2 = z^2$"
-                        aria-label="Typst 代码编辑器">$ sum_(k=1)^n k = (n(n+1)) / 2 $</textarea>
-                    
-                    <div class="button-group">
-                        <button type="button" id="compile-btn">编译公式</button>
-                        <button type="button" id="clear-btn">清空</button>
-                    </div>
+                        placeholder="Input Typst Code, like: $x^2 + y^2 = z^2$"
+                        aria-label="Typst Editor">$ sum_(k=1)^n k = (n(n+1)) / 2 $</textarea>
                 </article>
                 
-                <!-- 右侧：预览区域 -->
+                <!-- Output: SVG Figure Preview -->
                 <article class="preview-panel">
-                    <h3>公式预览</h3>
+                    <h3>Output Area</h3>
                     <div id="preview-area" role="region" aria-label="公式预览区域">
                         <p style="color: #666;">公式预览将显示在这里...</p>
                     </div>
@@ -54,19 +56,14 @@
     
     <hr>
     
-    <!-- 页面底部导航 -->
+    <!-- footer -->
     <footer>
-        <nav>
-            <a href="{{ url_for('main.history') }}">查看编译历史</a>
-            <span aria-hidden="true"> | </span>
-            <a href="{{ url_for('main.profile') }}">编辑个人信息</a>
-        </nav>
     </footer>
     
-    <!-- Socket.IO 客户端库 -->
+    <!-- Socket.IO Server -->
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     
-    <!-- 引入自定义 JavaScript -->
-    <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+    <!-- My JavaScript Files -->
+    <script src="{{ url_for('static', filename='js/compile.js') }}"></script>
 </body>
 </html>
