@@ -12,6 +12,7 @@ from app.config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
+socketio = None
 
 
 # create app
@@ -41,5 +42,12 @@ def create_app(config_mode=Config):
     with app.app_context():
         db.create_all()
         
+    global socketio
+    from app.websocket import setup_socketio
+    socketio = setup_socketio(app)
+        
     return app
     
+
+def get_socketio():
+    return socketio

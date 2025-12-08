@@ -16,6 +16,14 @@ class Config:
     # session lifetime
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=1)
     
+    
+    # SocketIO 
+    SOCKETIO_ASYNC_MODE = 'eventlet'
+    SOCKETIO_PING_TIMEOUT = 60
+    SOCKETIO_PING_INTERVAL = 25
+    
+    
+    """
     # upload file
     # max file size: 16MB
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
@@ -30,7 +38,7 @@ class Config:
     
     # development
     DEBUG = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
-    
+    """
     
 
 class DevelopmentConfig(Config):
