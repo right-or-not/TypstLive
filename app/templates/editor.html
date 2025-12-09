@@ -1,69 +1,57 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TypstLive - Editor</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <!-- header -->
-    <header>
-        <div>
-            <span>TypstLive</span>
-            <span>{{ current_user.username }}</span>
-        </div>
-        <nav>
-            <a href="{{ url_for('main.history') }}">Compile History</a>
-            <span aria-hidden="true"> | </span>
-            <a href="{{ url_for('main.profile') }}">Edit Profile</a>
-            <form action="{{ url_for('auth.logout') }}" method="post">
-                <button type="submit">Logout</button>
-            </form>
-        </nav>
-    </header>
-    
-    <hr>
-    
-    <!-- main -->
-    <main>
-        <section class="editor-section">            
-            <div class="editor-container">
-                <!-- Input: Typst Code Editor -->
-                <article class="code-panel">
-                    <h3>Input Area</h3>
-                    <div class="button-group">
-                        <button type="button" id="like-btn">like</button>
-                        <button type="button" id="clear-btn">clear</button>
-                    </div>
-                    <textarea 
-                        id="typst-code" 
-                        placeholder="Input Typst Code, like: $x^2 + y^2 = z^2$"
-                        aria-label="Typst Editor">$ sum_(k=1)^n k = (n(n+1)) / 2 $</textarea>
-                </article>
-                
-                <!-- Output: SVG Figure Preview -->
-                <article class="preview-panel">
-                    <h3>Output Area</h3>
-                    <div id="preview-area" role="region" aria-label="公式预览区域">
-                        <p style="color: #666;">公式预览将显示在这里...</p>
-                    </div>
-                    <div id="error-area" role="alert" aria-live="polite"></div>
-                </article>
+{% extends "base.html" %}
+
+{% block title %}Editor{% endblock %}
+
+{% block extra_css %}
+<!-- My CSS Files -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/editor.css') }}">
+<!-- highlight Typst Files -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/syntax-highlight.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="editor-section">            
+    <div class="editor-container">
+        <!-- Input: Typst Code Editor -->
+        <article class="code-panel">
+            <div class="title">Input Area</div>
+            <div class="selections-container">
+                <div class="environment-select">
+                    <button type="button" id="passage-btn">Passage</button>
+                    <button type="button" id="inline-formula-btn">Inline Formula</button>
+                    <button type="button" id="interline-formula-btn">Interline Formula</button>
+                </div>
+                <div class="button-group">
+                    <button type="button" id="like-btn" title="Like(Ctrl+K)"></button>
+                    <button type="button" id="clear-btn" title="Clear(Ctrl+C)"></button>
+                </div>
             </div>
-        </section>
-    </main>
-    
-    <hr>
-    
-    <!-- footer -->
-    <footer>
-    </footer>
-    
-    <!-- Socket.IO Server -->
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    
-    <!-- My JavaScript Files -->
-    <script src="{{ url_for('static', filename='js/compile.js') }}"></script>
-</body>
-</html>
+            <textarea 
+                id="typst-code" 
+                placeholder="Input Typst Code, like: $x^2 + y^2 = z^2$"
+                aria-label="Typst Editor">$ sum_(k=1)^n k = (n(n+1)) / 2 $</textarea>
+        </article>
+        
+        <!-- Output: SVG Figure Preview -->
+        <article class="preview-panel">
+            <div class="title">Output Area</div>
+            <div id="preview-area" role="region" aria-label="公式预览区域">
+                <p style="color: #666;">公式预览将显示在这里...</p>
+            </div>
+            <div id="error-area" role="alert" aria-live="polite"></div>
+        </article>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Socket.IO Server -->
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+<!-- My JavaScript Files -->
+<script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+<!-- compile Typst Code -->
+<script src="{{ url_for('static', filename='js/compile.js') }}"></script>
+<!-- highlight Typst Code -->
+<script src="{{ url_for('static', filename='js/syntax-highlight.js') }}"></script>
+{% endblock %}
