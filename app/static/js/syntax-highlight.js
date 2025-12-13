@@ -112,6 +112,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Store editor instance globally for access from other scripts
     window.typstEditor = editor;
+    console.log('[CodeMirror] Initialized successfully');
+    console.log('[CodeMirror] window.typstEditor is available');
     
     // Update CodeMirror styling
     const cmWrapper = editor.getWrapperElement();
@@ -121,6 +123,12 @@ document.addEventListener('DOMContentLoaded', function() {
     cmWrapper.style.fontSize = '14px';
     cmWrapper.style.fontFamily = "'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace";
     
+    // show editor.js
+    const readyEvent = new CustomEvent('codemirrorReady', { 
+        detail: { editor: editor } 
+    });
+    document.dispatchEvent(readyEvent);
+
     // Focus on editor
     editor.focus();
 });
@@ -145,3 +153,28 @@ function setEditorContent(content) {
         }
     }
 }
+
+function isCodeMirrorReady() {
+    return !!window.typstEditor;
+}
+
+function waitForCodeMirror(callback, timeout = 5000) {
+    const startTime = Date.now();
+    const checkInterval = setInterval(() => {
+        if (window.typstEditor) {
+            clearInterval(checkInterval);
+            console.log('[CodeMirror] Ready after', Date.now() - startTime, 'ms');
+            callback(window.typstEditor);
+        } else if (Date.now() - startTime > timeout) {
+            clearInterval(checkInterval);
+            console.warn('[CodeMirror] Timeout waiting for initialization');
+            callback(null);
+        }
+    }, 50);
+}
+
+// export to windows
+window.getEditorContent = getEditorContent;
+window.setEditorContent = setEditorContent;
+window.isCodeMirrorReady = isCodeMirrorReady;
+window.waitForCodeMirror = waitForCodeMirror;

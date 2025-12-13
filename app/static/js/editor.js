@@ -1,5 +1,14 @@
 // Editor functionality for TypstLive
 
+// Environment storage
+const environmentStorage = {
+    'passage': '',
+    'inline-formula': '',
+    'interline-formula': ''
+};
+
+let currentEnvironment = 'inline-formula';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Get DOM elements
     const typstCodeTextarea = document.getElementById('typst-code');
@@ -15,9 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const likeBtn = document.getElementById('like-btn');
     const clearBtn = document.getElementById('clear-btn');
     
-    // Current environment state
-    let currentEnvironment = 'inline-formula';
-    
     // Initialize: Set default active environment
     if (inlineFormulaBtn) {
         inlineFormulaBtn.classList.add('active');
@@ -25,6 +31,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Environment selection handlers
     function setEnvironment(env, button) {
+        // Store content of current environment
+        if (currentEnvironment && typstCodeTextarea) {
+            environmentStorage[currentEnvironment] = typstCodeTextarea;
+            console.log(`[setEnvironment] Save the content in ${currentEnvironment}`)
+            console.log('environmentStorage: ', environmentStorage);
+        }
+
+        // change to new environment
+        let oldEnvironment = currentEnvironment;
         currentEnvironment = env;
         
         // Remove active class from all buttons
@@ -36,19 +51,42 @@ document.addEventListener('DOMContentLoaded', function() {
         if (button) {
             button.classList.add('active');
         }
+
+        // add the content of new environment
+        if (typstCodeTextarea) {
+            const newContent = environmentStorage[env] || '';
+
+            if (window.typstEditor) {
+                window.typstEditor.setValue(newContent);
+            } else {
+                typstCodeTextarea = newContent;
+            }
+
+            console.log(`[setEnvironment] Add the content in Environment ${currentEnvironment}`)
+        }
         
         // Update textarea placeholder based on environment
         switch(env) {
             case 'passage':
-                typstCodeTextarea.placeholder = 'Input Typst passage code...';
+                typstCodeTextarea.placeholder = 'Input Typst passage code Here';
                 break;
             case 'inline-formula':
-                typstCodeTextarea.placeholder = 'Input Typst inline formula, like: $x^2 + y^2 = z^2$';
+                typstCodeTextarea.placeholder = 'Input Typst inline formula Here';
                 break;
             case 'interline-formula':
-                typstCodeTextarea.placeholder = 'Input Typst display formula, like: $ sum_(k=1)^n k $';
+                typstCodeTextarea.placeholder = 'Input Typst display formula Here';
                 break;
         }
+
+        // clear the preview area
+        if (previewArea) {
+            previewArea.innerHTML = '<p style="color: #666;">Output will be Shown Here!</p>'
+        }
+        if (errorArea) {
+            errorArea.textContent = '';
+        }
+
+        console.log(`[setEnvironment] Environment change from ${oldEnvironment} to ${currentEnvironment}`)
     }
     
     // Add event listeners for environment buttons
@@ -91,11 +129,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Clear button handler
     if (clearBtn) {
         clearBtn.addEventListener('click', function() {
-            if (confirm('Clear all content?')) {
-                typstCodeTextarea.value = '';
-                previewArea.innerHTML = '<p style="color: #666;">公式预览将显示在这里...</p>';
+            if (confirm('Clear Current Environment Content?')) {
+                if (window.typstEditor) {
+                    window.typstEditor.setValue(''),
+                    window.typstEditor.focus();
+                } else if (typstCodeTextarea) {
+                    typstCodeTextarea.value = '';
+                    typstCodeTextarea.focus();
+                }
+                environmentStorage[currentEnvironment] = '';
+                previewArea.innerHTML = '<p style="color: #666;">Output will be Shown Here!</p>';
                 errorArea.textContent = '';
-                typstCodeTextarea.focus();
             }
         });
     }
@@ -116,7 +160,30 @@ document.addEventListener('DOMContentLoaded', function() {
             clearBtn.click();
         }
     });
+
+    // store the input realtime
+    if (window.typstEditor) {
+        window.typstEditor.on('change', function(cm) {
+            environmentStorage[currentEnvironment] = cm.getValue();
+        });
+    } else if (typstCodeTextarea) {
+        typstCodeTextarea.addEventListener('input', function() {
+            environmentStorage[currentEnvironment] = this.value;
+        });
+    }
+
+    // search the content of current environment
+    if (environmentStorage[currentEnvironment]) {
+        if (window.typstEditor) {
+            window.typstEditor.setValue(environmentStorage[currentEnvironment]);
+        } else if (typstCodeTextarea) {
+            typstCodeTextarea.value = environmentStorage[currentEnvironment];
+        }
+    }
     
+    /** 
+     * Basic syntax highlighting for Typst
+     * Now replaced by syntax-highlight.js & syntax-highlight.css
     // Basic syntax highlighting for Typst (simple version)
     // This is a basic implementation - for full highlighting, consider using CodeMirror or Monaco
     function addBasicHighlighting() {
@@ -130,6 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     addBasicHighlighting();
+    */
     
     // Auto-resize preview area when content loads
     const resizeObserver = new ResizeObserver(entries => {
