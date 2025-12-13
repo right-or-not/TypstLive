@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.Text, nullable=False)
     # profile info
     gender = db.Column(db.String(10), default='Secret') 
+    phone_number = db.Column(db.String(20), unique=True, nullable=True)
     birthday = db.Column(db.Date, nullable=True)
     bio = db.Column(db.Text, nullable=True)
     signature = db.Column(db.String(255), nullable=True)
