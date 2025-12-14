@@ -1,186 +1,158 @@
+// static/js/syntax-highlight.js
 // Advanced Syntax Highlighting for Typst using CodeMirror
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if CodeMirror is available
+// Private Variable
+let editorInstance = null;
+let rawTextarea = null;
+
+
+/**
+ * Initialize CodeMirror logic
+ * @param {string} textareaId - The ID of the textarea to replace
+ */
+function init(textareaId) {
+    rawTextarea = document.getElementById(textareaId);
+    if (!rawTextarea) return;
+
+    // Check if CodeMirror lib is loaded (Global object from CDN)
     if (typeof CodeMirror === 'undefined') {
-        console.log('CodeMirror not loaded - using plain textarea');
+        console.warn('CodeMirror library not loaded, falling back to plain textarea.');
         return;
     }
-    
-    const textarea = document.getElementById('typst-code');
-    if (!textarea) return;
-    
-    // Define Typst syntax highlighting mode
-    CodeMirror.defineMode("typst", function() {
-        return {
-            token: function(stream, state) {
-                // Math mode ($...$)
-                if (stream.match(/\$[^\$]*\$/)) {
-                    return "string math";
-                }
-                
-                // Comments
-                if (stream.match(/\/\/.*/)) {
-                    return "comment";
-                }
-                
-                // Block comments
-                if (stream.match(/\/\*/)) {
-                    state.inComment = true;
-                    return "comment";
-                }
-                if (state.inComment) {
-                    if (stream.match(/\*\//)) {
-                        state.inComment = false;
-                        return "comment";
-                    }
-                    stream.next();
-                    return "comment";
-                }
-                
-                // Functions and commands
-                if (stream.match(/\\[a-zA-Z]+/)) {
-                    return "keyword";
-                }
-                
-                // Typst functions (#...)
-                if (stream.match(/#[a-zA-Z_][a-zA-Z0-9_]*/)) {
-                    return "builtin";
-                }
-                
-                // Numbers
-                if (stream.match(/\b\d+(\.\d+)?(em|pt|mm|cm|in)?\b/)) {
-                    return "number";
-                }
-                
-                // Operators in math
-                if (stream.match(/[\+\-\*\/\=\<\>\^\_]/)) {
-                    return "operator";
-                }
-                
-                // Brackets
-                if (stream.match(/[\(\)\[\]\{\}]/)) {
-                    return "bracket";
-                }
-                
-                stream.next();
-                return null;
-            },
-            startState: function() {
-                return { inComment: false };
-            }
-        };
-    });
-    
-    // Initialize CodeMirror
-    const editor = CodeMirror.fromTextArea(textarea, {
+
+    // Define Typst Mode
+    defineTypstMode();
+
+    // Create Instance
+    editorInstance = CodeMirror.fromTextArea(rawTextarea, {
         mode: "typst",
         lineNumbers: true,
         lineWrapping: true,
         theme: "default",
         tabSize: 2,
         indentUnit: 2,
-        indentWithTabs: false,
-        electricChars: true,
         smartIndent: true,
         matchBrackets: true,
         autoCloseBrackets: true,
         extraKeys: {
-            "Ctrl-Enter": function(cm) {
-                // Trigger compile
-                const event = new CustomEvent('manualCompile');
-                document.dispatchEvent(event);
+            "Ctrl-Enter": () => dispatchCustomEvent('manualCompile'),
+            "Cmd-Enter": () => dispatchCustomEvent('manualCompile')
+        }
+    });
+
+    // Style and Sync
+    editorInstance.setSize(null, "100%");
+    
+    // Sync changes back to raw textarea for form compatibility
+    editorInstance.on('change', (cm) => {
+        rawTextarea.value = cm.getValue();
+        // Dispatch input event for listeners on the original textarea
+        rawTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    
+    // Wrapper styling
+    const wrapper = editorInstance.getWrapperElement();
+    wrapper.style.height = '100%';
+    wrapper.style.border = '1px solid #d0d7de';
+    wrapper.style.borderRadius = '6px';
+    wrapper.style.fontFamily = "'Monaco', 'Menlo', 'Consolas', monospace";
+
+    console.log('[CodeMirrorAPI] Initialized successfully');
+}
+
+/**
+ * Helper to dispatch events
+ */
+function dispatchCustomEvent(eventName) {
+    document.dispatchEvent(new CustomEvent(eventName));
+}
+
+/**
+ * Define the syntax highlighting rules
+ */
+function defineTypstMode() {
+    CodeMirror.defineMode("typst", function() {
+        return {
+            token: function(stream, state) {
+                // Math mode ($...$)
+                if (stream.match(/\$[^\$]*\$/)) return "string math";
+                // Comments
+                if (stream.match(/\/\/.*/)) return "comment";
+                // Block comments
+                if (stream.match(/\/\*/)) { state.inComment = true; return "comment"; }
+                if (state.inComment) {
+                    if (stream.match(/\*\//)) { state.inComment = false; return "comment"; }
+                    stream.next(); return "comment";
+                }
+                // Keywords/Functions
+                if (stream.match(/\\[a-zA-Z]+/)) return "keyword";
+                if (stream.match(/#[a-zA-Z_][a-zA-Z0-9_]*/)) return "builtin";
+                // Numbers & Units
+                if (stream.match(/\b\d+(\.\d+)?(em|pt|mm|cm|in)?\b/)) return "number";
+                // Operators
+                if (stream.match(/[\+\-\*\/\=\<\>\^\_]/)) return "operator";
+                // Brackets
+                if (stream.match(/[\(\)\[\]\{\}]/)) return "bracket";
+                
+                stream.next();
+                return null;
             },
-            "Cmd-Enter": function(cm) {
-                // Trigger compile for Mac
-                const event = new CustomEvent('manualCompile');
-                document.dispatchEvent(event);
-            }
-        }
+            startState: function() { return { inComment: false }; }
+        };
     });
-    
-    // Apply custom styling to CodeMirror
-    editor.setSize(null, "100%");
-    
-    // Sync CodeMirror content back to textarea
-    editor.on('change', function(cm) {
-        textarea.value = cm.getValue();
-        // Trigger input event for other listeners
-        const event = new Event('input', { bubbles: true });
-        textarea.dispatchEvent(event);
-    });
-    
-    // Store editor instance globally for access from other scripts
-    window.typstEditor = editor;
-    console.log('[CodeMirror] Initialized successfully');
-    console.log('[CodeMirror] window.typstEditor is available');
-    
-    // Update CodeMirror styling
-    const cmWrapper = editor.getWrapperElement();
-    cmWrapper.style.height = '100%';
-    cmWrapper.style.border = '1px solid #d0d7de';
-    cmWrapper.style.borderRadius = '6px';
-    cmWrapper.style.fontSize = '14px';
-    cmWrapper.style.fontFamily = "'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace";
-    
-    // show editor.js
-    const readyEvent = new CustomEvent('codemirrorReady', { 
-        detail: { editor: editor } 
-    });
-    document.dispatchEvent(readyEvent);
-
-    // Focus on editor
-    editor.focus();
-});
-
-// Helper function to get editor content (works with or without CodeMirror)
-function getEditorContent() {
-    if (window.typstEditor) {
-        return window.typstEditor.getValue();
-    }
-    const textarea = document.getElementById('typst-code');
-    return textarea ? textarea.value : '';
 }
 
-// Helper function to set editor content (works with or without CodeMirror)
-function setEditorContent(content) {
-    if (window.typstEditor) {
-        window.typstEditor.setValue(content);
-        window.typstEditor.focus();
-    } else {
-        const textarea = document.getElementById('typst-code');
-        if (textarea) {
-            textarea.value = content;
-            textarea.focus();
-        }
+// --- Public API Implementation ---
+
+function getValue() {
+    if (editorInstance) return editorInstance.getValue();
+    return rawTextarea ? rawTextarea.value : '';
+}
+
+function setValue(content) {
+    if (editorInstance) {
+        editorInstance.setValue(content || '');
+        // When setting value programmatically, usually we want to clear history or just refresh
+        editorInstance.refresh(); 
+    } else if (rawTextarea) {
+        rawTextarea.value = content || '';
     }
 }
 
-// Show CodeMirror State
-function isCodeMirrorReady() {
-    return !!window.typstEditor;
+function focus() {
+    if (editorInstance) {
+        editorInstance.focus();
+    } else if (rawTextarea) {
+        rawTextarea.focus();
+    }
 }
 
-// Wait function
-function waitForCodeMirror(callback, timeout = 5000) {
-    const startTime = Date.now();
-    const checkInterval = setInterval(() => {
-        if (window.typstEditor) {
-            clearInterval(checkInterval);
-            console.log('[CodeMirror] Ready after', Date.now() - startTime, 'ms');
-            callback(window.typstEditor);
-        } else if (Date.now() - startTime > timeout) {
-            clearInterval(checkInterval);
-            console.warn('[CodeMirror] Timeout waiting for initialization');
-            callback(null);
-        }
-    }, 50);
+/**
+ * Register a change listener
+ * @param {Function} callback - function(newValue)
+ */
+function onChange(callback) {
+    if (editorInstance) {
+        editorInstance.on('change', (cm) => {
+            callback(cm.getValue());
+        });
+    } else if (rawTextarea) {
+        rawTextarea.addEventListener('input', (e) => {
+            callback(e.target.value);
+        });
+    }
 }
 
-// Export CodeMirror API
-window.CodeMirrorAPI = {
-    getValue: getEditorContent,
-    setValue: setEditorContent,
-    isReady: isCodeMirrorReady,
-    wait: waitForCodeMirror
+function isReady() {
+    return !!editorInstance;
+}
+
+// Export CodeMirrorAPI
+export const CodeMirrorAPI = {
+    init,
+    getValue,
+    setValue,
+    focus,
+    onChange,
+    isReady
 };

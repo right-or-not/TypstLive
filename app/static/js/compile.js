@@ -1,145 +1,160 @@
-// Socket.IO Connection
+// static/js/compile.js
+import { CodeMirrorAPI } from './syntax-highlight.js';
+
+// Configuration
+const COMPILE_DELAY = 300; // Debounce delay in ms
+
+// State
 let socket = null;
 let compileTimeout = null;
-const COMPILE_DELAY = 300;
 
-// page elements
-const typstCodeTextarea = document.getElementById('typst-code');
+// DOM Elements
 const previewArea = document.getElementById('preview-area');
 const errorArea = document.getElementById('error-area');
-const clearBtn = document.getElementById('clear-btn');
 
 /**
- * init Socket.IO connection
+ * Initialize Socket.IO connection
  */
 function initSocket() {
+    // Check if io is loaded (from CDN)
+    if (typeof window.io === 'undefined') {
+        console.error('Socket.IO library not loaded!');
+        if (errorArea) errorArea.textContent = 'Error: Socket.IO library missing.';
+        return;
+    }
+
     // connect Socket.IO server
-    socket = io({
+    socket = window.io({
         transports: ['websocket', 'polling'],
         reconnection: true,
         reconnectionDelay: 1000,
         reconnectionAttempts: 5
     });
     
-    // connect success
+    // --- Event Handlers ---
+
+    // 1. Connect Success
     socket.on('connect', function() {
-        console.log('Socket.IO connection built');
-        errorArea.textContent = '';
+        console.log('[Socket.IO] Connected');
+        if (errorArea) errorArea.textContent = '';
+        // Try to compile immediately upon connection if there is code
+        attemptCompile();
     });
     
-    // receive Server comfirm info
+    // 2. Server Confirmation
     socket.on('connected', function(data) {
-        console.log('Server Info: ', data.message);
+        console.log('[Socket.IO] Server Message:', data.message);
     });
     
-    // receive Compile result
+    // 3. Receive Compile Result
     socket.on('compile_result', function(result) {
         if (result.success) {
-            // show SVG
-            previewArea.innerHTML = result.svg;
-            errorArea.textContent = '';
+            // Update SVG Preview
+            if (previewArea) previewArea.innerHTML = result.svg;
+            if (errorArea) errorArea.textContent = '';
         } else {
-            // show ERROR info
-            previewArea.innerHTML = '<p style="color: #666;">编译失败</p>';
-            errorArea.textContent = result.error;
+            // Show Error
+            // Only show "Compile Failed" if it's a real error, not just empty
+            if (result.error && result.error !== 'Typst Code is Empty') {
+                if (previewArea) previewArea.innerHTML = '<p style="color: #666; opacity: 0.7;">(Preview outdated)</p>';
+                if (errorArea) errorArea.textContent = result.error;
+            }
         }
     });
     
-    // connect error
+    // 4. Connect Error
     socket.on('connect_error', function(error) {
-        console.error('Socket.IO connect error: ', error);
-        errorArea.textContent = 'Socket 连接错误';
+        console.error('[Socket.IO] Connect error:', error);
+        if (errorArea) errorArea.textContent = 'Connection Error';
     });
     
-    // disconnect
+    // 5. Disconnect
     socket.on('disconnect', function(reason) {
-        console.log('Socket.IO disconnect: ', reason);
+        console.log('[Socket.IO] Disconnected:', reason);
         if (reason === 'io server disconnect') {
-            // server disconnect => client should try connect
             socket.connect();
         }
-        errorArea.textContent = 'Socket link disconnect, Reconnecting...';
+        if (errorArea) errorArea.textContent = 'Disconnected, Reconnecting...';
     });
     
-    // reconnect success
+    // 6. Reconnect Success
     socket.on('reconnect', function(attemptNumber) {
-        console.log('Socket.IO reconnect successfully, try times: ', attemptNumber);
-        errorArea.textContent = '';
-        // compile current code
-        if (typstCodeTextarea.value.trim()) {
-            compileCode();
-        }
-    });
-    
-    // reconnect failed
-    socket.on('reconnect_failed', function() {
-        console.error('Socket.IO reconnect failed.');
-        errorArea.textContent = 'Socket reconnect failed, Please Refresh Page!';
+        console.log('[Socket.IO] Reconnected after', attemptNumber, 'attempts');
+        if (errorArea) errorArea.textContent = '';
+        attemptCompile();
     });
 }
 
 /**
- * send compile request
+ * Send compile request to server
+ * Uses CodeMirrorAPI to get the source of truth
  */
 function compileCode() {
-    const code = typstCodeTextarea.value.trim();
+    // 1. Get code from API (Source of Truth)
+    const code = CodeMirrorAPI.getValue().trim();
     
+    // 2. Handle empty code
     if (!code) {
-        previewArea.innerHTML = '<p style="color: #666;">请输入 Typst 代码</p>';
-        errorArea.textContent = '';
+        if (previewArea) previewArea.innerHTML = '<p style="color: #666;">Input Typst Code to Render</p>';
+        if (errorArea) errorArea.textContent = '';
         return;
     }
     
+    // 3. Emit if connected
     if (socket && socket.connected) {
-        // send compile request to Server
         socket.emit('compile', { code: code });
     } else {
-        errorArea.textContent = 'Socket unconnected, Please Refresh Page!';
+        // Silent fail or minimal UI update if just typing
+        // errorArea.textContent = 'Socket unconnected...';
     }
 }
 
 /**
- * debounce function
+ * Debounce wrapper for compilation
  */
 function debouncedCompile() {
-    // clear Timer
     if (compileTimeout) {
         clearTimeout(compileTimeout);
     }
-    
-    // set new Timer
     compileTimeout = setTimeout(compileCode, COMPILE_DELAY);
 }
 
 /**
- * Clear Editor
+ * Helper to try compiling without arguments
  */
-function clearEditor() {
-    typstCodeTextarea.value = '';
-    previewArea.innerHTML = '<p style="color: #666;">Output will be Shown Here!</p>';
-    errorArea.textContent = '';
+function attemptCompile() {
+    compileCode();
 }
 
-// Event Listener
+// --- Initialization Logic ---
+
 document.addEventListener('DOMContentLoaded', function() {
-    // init Socket.IO
+    // 1. Initialize Socket
     initSocket();
     
-    // debounce
-    typstCodeTextarea.addEventListener('input', debouncedCompile);
-    
-    // clear Button
-    clearBtn.addEventListener('click', clearEditor);
-    
-    // compile default Typst code
-    setTimeout(function() {
-        if (typstCodeTextarea.value.trim() && socket && socket.connected) {
-            compileCode();
+    // 2. Register Change Listener with CodeMirrorAPI
+    // This replaces the old 'input' event listener on the textarea
+    CodeMirrorAPI.onChange(() => {
+        debouncedCompile();
+    });
+
+    // 3. Listen for Manual Compile (Ctrl+Enter)
+    // Dispatched from syntax-highlight.js
+    document.addEventListener('manualCompile', () => {
+        console.log('[Compile] Manual trigger');
+        if (compileTimeout) clearTimeout(compileTimeout); // Cancel pending debounce
+        compileCode(); // Run immediately
+    });
+
+    // 4. Initial Compile Check (Wait slightly for CodeMirror to init)
+    setTimeout(() => {
+        if (CodeMirrorAPI.getValue().trim()) {
+            attemptCompile();
         }
     }, 500);
 });
 
-// before page unload: Disconnect Socket
+// Cleanup
 window.addEventListener('beforeunload', function() {
     if (socket) {
         socket.disconnect();

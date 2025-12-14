@@ -1,4 +1,8 @@
+// static/js/editor.js
 // Editor functionality for TypstLive
+
+// Import CodeMirror API
+import { CodeMirrorAPI } from './syntax-highlight.js';
 
 // Environment storage
 const environmentStorage = {
@@ -9,18 +13,22 @@ const environmentStorage = {
 
 let currentEnvironment = 'inline-formula';
 
+// Wait for DOM
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- Initialize CodeMirror ---
+    // This replaces the old auto-init in syntax-highlight.js
+    CodeMirrorAPI.init('typst-code');
+
     // Get DOM elements
-    const typstCodeTextarea = document.getElementById('typst-code');
+    const typstCodeTextarea = document.getElementById('typst-code'); // Still needed for placeholder manipulation
     const previewArea = document.getElementById('preview-area');
     const errorArea = document.getElementById('error-area');
     
-    // Environment buttons
+    // Buttons
     const passageBtn = document.getElementById('passage-btn');
     const inlineFormulaBtn = document.getElementById('inline-formula-btn');
     const interlineFormulaBtn = document.getElementById('interline-formula-btn');
-    
-    // Action buttons
     const likeBtn = document.getElementById('like-btn');
     const clearBtn = document.getElementById('clear-btn');
     
@@ -28,129 +36,99 @@ document.addEventListener('DOMContentLoaded', function() {
     if (inlineFormulaBtn) {
         inlineFormulaBtn.classList.add('active');
     }
-    
-    // Environment selection handlers
-    function setEnvironment(env, button) {
-        // Store content of current environment
-        if (currentEnvironment && typstCodeTextarea) {
-            const currentContent = window.typstEditor ? window.typstEditor.getValue() : typstCodeTextarea.value;
-            environmentStorage[currentEnvironment] = currentContent;
-            console.log(`[setEnvironment] Save the content in ${currentEnvironment}`)
-            console.log('environmentStorage: ', environmentStorage);
-        }
 
-        // change to new environment
-        let oldEnvironment = currentEnvironment;
+    // --- Realtime Storage ---
+    // Replaces: window.typstEditor.on('change', ...)
+    CodeMirrorAPI.onChange((newValue) => {
+        environmentStorage[currentEnvironment] = newValue;
+    });
+
+    
+    // Environment selection logic
+    function setEnvironment(env, button) {
+        // 1. Save content of OLD environment
+        // Replaces: window.typstEditor.getValue()
+        const currentContent = CodeMirrorAPI.getValue();
+        environmentStorage[currentEnvironment] = currentContent;
+        
+        console.log(`[setEnvironment] Save content for ${currentEnvironment}`);
+
+        // 2. Switch Context
+        const oldEnvironment = currentEnvironment;
         currentEnvironment = env;
         
-        // Remove active class from all buttons
-        document.querySelectorAll('.environment-select button').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        
-        // Add active class to clicked button
-        if (button) {
-            button.classList.add('active');
-        }
+        // Update UI buttons
+        document.querySelectorAll('.environment-select button').forEach(btn => btn.classList.remove('active'));
+        if (button) button.classList.add('active');
 
-        // add the content of new environment
+        // 3. Load content of NEW environment
         const newContent = environmentStorage[env] || '';
-        if (window.typstEditor) {
-            window.typstEditor.setValue(newContent);
-        }
-        if (typstCodeTextarea) {
-            typstCodeTextarea.value = newContent;
-        }
-        console.log(`[setEnvironment] Add the content in Environment ${currentEnvironment}`)
         
-        // Update textarea placeholder based on environment
-        switch(env) {
-            case 'passage':
-                typstCodeTextarea.placeholder = 'Input Typst passage code Here';
-                break;
-            case 'inline-formula':
-                typstCodeTextarea.placeholder = 'Input Typst inline formula Here';
-                break;
-            case 'interline-formula':
-                typstCodeTextarea.placeholder = 'Input Typst display formula Here';
-                break;
+        // Replaces: window.typstEditor.setValue(newContent)
+        CodeMirrorAPI.setValue(newContent);
+        
+        // 4. Focus editor
+        // Replaces: window.typstEditor.focus()
+        CodeMirrorAPI.focus();
+
+        console.log(`[setEnvironment] Switched to ${currentEnvironment}`);
+        
+        // Update placeholders (Direct DOM manipulation is fine for attributes)
+        if (typstCodeTextarea) {
+            switch(env) {
+                case 'passage':
+                    typstCodeTextarea.placeholder = 'Input Typst passage code Here';
+                    break;
+                case 'inline-formula':
+                    typstCodeTextarea.placeholder = 'Input Typst inline formula Here';
+                    break;
+                case 'interline-formula':
+                    typstCodeTextarea.placeholder = 'Input Typst display formula Here';
+                    break;
+            }
         }
 
-        // clear the preview area
-        if (previewArea) {
-            previewArea.innerHTML = '<p style="color: #666;">Output will be Shown Here!</p>'
-        }
-        if (errorArea) {
-            errorArea.textContent = '';
-        }
-
-        console.log(`[setEnvironment] Environment change from ${oldEnvironment} to ${currentEnvironment}`)
+        // Clear preview
+        if (previewArea) previewArea.innerHTML = '<p style="color: #666;">Output will be Shown Here!</p>';
+        if (errorArea) errorArea.textContent = '';
     }
     
-    // Add event listeners for environment buttons
-    if (passageBtn) {
-        passageBtn.addEventListener('click', function() {
-            setEnvironment('passage', this);
-        });
-    }
+    // Event Listeners for Environment Buttons
+    if (passageBtn) passageBtn.addEventListener('click', function() { setEnvironment('passage', this); });
+    if (inlineFormulaBtn) inlineFormulaBtn.addEventListener('click', function() { setEnvironment('inline-formula', this); });
+    if (interlineFormulaBtn) interlineFormulaBtn.addEventListener('click', function() { setEnvironment('interline-formula', this); });
     
-    if (inlineFormulaBtn) {
-        inlineFormulaBtn.addEventListener('click', function() {
-            setEnvironment('inline-formula', this);
-        });
-    }
-    
-    if (interlineFormulaBtn) {
-        interlineFormulaBtn.addEventListener('click', function() {
-            setEnvironment('interline-formula', this);
-        });
-    }
-    
-    // Like button handler
+    // Like button
     if (likeBtn) {
         likeBtn.addEventListener('click', function() {
-            // TODO: Implement like functionality
-            // This could save the current code to favorites
             console.log('Like button clicked');
-            
-            // Visual feedback
             this.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 200);
-            
-            // You can add your like logic here
-            // For example: save to localStorage or send to server
+            setTimeout(() => { this.style.transform = ''; }, 200);
         });
     }
     
-    // Clear button handler
+    // Clear button
     if (clearBtn) {
         clearBtn.addEventListener('click', function() {
             if (confirm('Clear Current Environment Content?')) {
-                if (window.typstEditor) {
-                    window.typstEditor.setValue(''),
-                    window.typstEditor.focus();
-                } 
-                if (typstCodeTextarea) {
-                    typstCodeTextarea.value = '';
-                    typstCodeTextarea.focus();
-                }
+                // Replaces: window.typstEditor.setValue('')
+                CodeMirrorAPI.setValue('');
+                CodeMirrorAPI.focus();
+                
                 environmentStorage[currentEnvironment] = '';
-                previewArea.innerHTML = '<p style="color: #666;">Output will be Shown Here!</p>';
-                errorArea.textContent = '';
+                if (previewArea) previewArea.innerHTML = '<p style="color: #666;">Output will be Shown Here!</p>';
+                if (errorArea) errorArea.textContent = '';
             }
         });
     }
     
-    // Add keyboard shortcut support
+    // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
-        // Ctrl/Cmd + Enter to compile
+        // Ctrl+Enter is handled inside syntax-highlight.js extraKeys, 
+        // but we keep this for global capture if focus is outside editor
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-            e.preventDefault();
-            // Trigger compile event (if you have compile.js)
-            const event = new CustomEvent('manualCompile');
-            document.dispatchEvent(event);
+            // Check if focus is NOT in editor to avoid double firing
+            // (Optional logic, usually CustomEvent is robust enough)
         }
         
         // Ctrl/Cmd + K to clear
@@ -160,100 +138,54 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // store the input realtime
-    if (window.typstEditor) {
-        window.typstEditor.on('change', function(cm) {
-            environmentStorage[currentEnvironment] = cm.getValue();
-        });
-    }
-    if (typstCodeTextarea) {
-        typstCodeTextarea.addEventListener('input', function() {
-            environmentStorage[currentEnvironment] = this.value;
-        });
-    }
-
-    // search the content of current environment
+    // Initial Load Logic: Restore content if exists (e.g. page refresh)
     if (environmentStorage[currentEnvironment]) {
-        if (window.typstEditor) {
-            window.typstEditor.setValue(environmentStorage[currentEnvironment]);
-        } 
-        if (typstCodeTextarea) {
-            typstCodeTextarea.value = environmentStorage[currentEnvironment];
-        }
+        CodeMirrorAPI.setValue(environmentStorage[currentEnvironment]);
     }
     
-    /** 
-     * Basic syntax highlighting for Typst
-     * Now replaced by syntax-highlight.js & syntax-highlight.css
-    // Basic syntax highlighting for Typst (simple version)
-    // This is a basic implementation - for full highlighting, consider using CodeMirror or Monaco
-    function addBasicHighlighting() {
-        // This is placeholder - actual syntax highlighting would require
-        // a more sophisticated approach using CodeMirror or Monaco Editor
-        
-        // For now, we rely on the monospace font and good contrast
-        typstCodeTextarea.addEventListener('input', function() {
-            // You could add character counting, line numbers, etc here
-        });
-    }
-    
-    addBasicHighlighting();
-    */
-    
-    // Auto-resize preview area when content loads
+    // Add Tooltips
+    likeBtn.setAttribute('title', 'Save to favorites (Ctrl+L)');
+    clearBtn.setAttribute('title', 'Clear editor (Ctrl+K)');
+    passageBtn.setAttribute('title', 'Passage mode');
+    inlineFormulaBtn.setAttribute('title', 'Inline formula mode');
+    interlineFormulaBtn.setAttribute('title', 'Display formula mode');
+
+    // Auto-resize preview area
     const resizeObserver = new ResizeObserver(entries => {
         for (let entry of entries) {
-            // Handle preview content size changes
             const content = entry.target;
             if (content.scrollWidth > content.clientWidth) {
-                // Content is wider than container - scrollbar will appear
-                console.log('Horizontal scroll enabled');
+                // Handle overflow if needed
             }
         }
     });
-    
-    if (previewArea) {
-        resizeObserver.observe(previewArea);
-    }
-    
-    // Add tooltip functionality for buttons
-    function addTooltips() {
-        likeBtn.setAttribute('title', 'Save to favorites (Ctrl+L)');
-        clearBtn.setAttribute('title', 'Clear editor (Ctrl+K)');
-        passageBtn.setAttribute('title', 'Passage mode');
-        inlineFormulaBtn.setAttribute('title', 'Inline formula mode');
-        interlineFormulaBtn.setAttribute('title', 'Display formula mode');
-    }
-    
-    addTooltips();
+    if (previewArea) resizeObserver.observe(previewArea);
 });
 
+// --- Public API Export (Optional) --- //
+
 /** 
- * get current environment state
- * @returns {string} 'passage', 'inline-formula', 'interline-formula'
-*/
+ * Get current environment
+ */
 function getCurrentEnvironment() {
-    const activeBtn = document.querySelector('.environment-select button.active');
-    if (activeBtn) {
-        if (activeBtn.id === 'passage-btn') return 'passage';
-        if (activeBtn.id === 'inline-formula-btn') return 'inline-formula';
-        if (activeBtn.id === 'interline-formula-btn') return 'interline-formula';
-    }
-    return 'inline-formula'; // default
+    return currentEnvironment;
 }
 
 /**
- * get current code content
- * @returns {string} code in current environment
+ * Get current code
  */
 function getCurrentCode() {
-    const typstCodeTextarea = document.getElementById('typst-code');
-    return typstCodeTextarea ? typstCodeTextarea.value : '';
+    return CodeMirrorAPI.getValue();
 }
 
-
-// Export Editor API
+// Expose to window for legacy scripts (like compile.js if it's not a module yet)
 window.EditorAPI = {
     getCurrentEnvironment: getCurrentEnvironment,
     getCurrentCode: getCurrentCode
+};
+
+// Export EditorAPI
+export const EditorAPI = {
+    getCurrentEnvironment,
+    getCurrentCode
 };

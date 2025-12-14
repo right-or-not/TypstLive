@@ -35,7 +35,7 @@
         <!-- Output: SVG Figure Preview -->
         <article class="preview-panel">
             <div class="title">Output Area</div>
-            <div id="preview-area" role="region" aria-label="公式预览区域">
+            <div id="preview-area" role="region" aria-label="Output Preview Area">
                 <p style="color: #666;">Output will be Shown Here!</p>
             </div>
             <div id="error-area" role="alert" aria-live="polite"></div>
@@ -45,13 +45,10 @@
 {% endblock %}
 
 {% block extra_js %}
-<!-- Socket.IO Server -->
-<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-
 <!-- My JavaScript Files -->
-<script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/editor.js') }}"></script>
 <!-- compile Typst Code -->
-<script src="{{ url_for('static', filename='js/compile.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/compile.js') }}"></script>
 <!-- highlight Typst Code -->
-<script src="{{ url_for('static', filename='js/syntax-highlight.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/syntax-highlight.js') }}"></script>
 {% endblock %}
