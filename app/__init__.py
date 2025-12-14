@@ -4,6 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from flask_socketio import SocketIO
 # import config
 from app.config import Config
 
@@ -12,7 +13,7 @@ from app.config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
-socketio = None
+socketio = SocketIO()
 
 
 # create app
@@ -27,6 +28,11 @@ def create_app(config_mode=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    socketio.init_app(
+        app,
+        async_mode=app.config.get('SOCKETIO_ASYNC_MODE'),
+        cors_allowed_origins="*"
+    )
     
     # login config
     login_manager.login_view = "auth.login"
@@ -42,9 +48,7 @@ def create_app(config_mode=Config):
     with app.app_context():
         db.create_all()
         
-    global socketio
-    from app.websocket import setup_socketio
-    socketio = setup_socketio(app)
+    from app import websocket
         
     return app
     

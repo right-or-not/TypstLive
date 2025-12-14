@@ -1,10 +1,9 @@
 import os
-from app import create_app, db, get_socketio
+from app import create_app, db, socketio
 from app.models import User, CompilationHistory
 
 # create app: default development config
 app = create_app()
-socketio = get_socketio()
 
 
 @app.shell_context_processor
@@ -36,9 +35,6 @@ def main():
         use_reloader=False,
         allow_unsafe_werkzeug=True
     )
-
-
-
 
 
 if __name__ == "__main__":
