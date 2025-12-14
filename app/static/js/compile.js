@@ -17,10 +17,24 @@ const errorArea = document.getElementById('error-area');
  * Initialize Socket.IO connection
  */
 function initSocket() {
+    // Clear former Error Area
+    if (errorArea) errorArea.textContent = '';
+
     // Check if io is loaded (from CDN)
     if (typeof window.io === 'undefined') {
         console.error('Socket.IO library not loaded!');
         if (errorArea) errorArea.textContent = 'Error: Socket.IO library missing.';
+        return;
+    }
+
+    if (socket && socket.connected) {
+        console.log('[Socket.IO] Already Connected.');
+        return;
+    }
+
+    if (socket && !socket.connected) {
+        console.log('[Socket.IO] Reconnecting existing socket...');
+        socket.connect();
         return;
     }
 
@@ -116,7 +130,10 @@ function compileCode() {
         socket.emit('compile', { code: code });
     } else {
         // Silent fail or minimal UI update if just typing
-        errorArea.textContent = 'Socket unconnected...';
+        errorArea.textContent = 'Socket Unconnected. Try to Reconnect...';
+        console.warn('[Compile] Socket disconnected, trying to connect...');
+        if (socket) socket.connect();
+        else initSocket();
     }
 }
 
@@ -139,6 +156,7 @@ function attemptCompile() {
 
 // --- Initialization Logic ---
 
+// Listen for DOM
 document.addEventListener('DOMContentLoaded', function() {
     // 1. Initialize Socket
     initSocket();
@@ -163,6 +181,26 @@ document.addEventListener('DOMContentLoaded', function() {
             attemptCompile();
         }
     }, 500);
+});
+
+// Listen for pageshow
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted || (socket && !socket.connected)) {
+        console.log('[LifeCycle] Page shown from cache or disconnected. Try to Reconnect...');
+        if (errorArea) errorArea.textContent = '';
+        initSocket();
+    }
+})
+
+// Listen for visible
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+        if (socket && !socket.connected) {
+            console.log('[LifeCycle] Tab active, reconnecting socket...');
+            if (errorArea) errorArea.textContent = '';
+            socket.connect();
+        }
+    }
 });
 
 // Cleanup

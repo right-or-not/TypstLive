@@ -1,5 +1,8 @@
 // static/js/syntax-highlight.js
-// Advanced Syntax Highlighting for Typst using CodeMirror
+// Syntax Highlighting for Typst using CodeMirror
+
+// Import Hint Module
+import { setupTypstHint } from "./hint.js";
 
 // Private Variable
 let editorInstance = null;
@@ -24,6 +27,9 @@ function init(textareaId) {
     // Define Typst Mode
     defineTypstMode();
 
+    // Setup Hint Logic
+    setupTypstHint();
+
     // Create Instance
     editorInstance = CodeMirror.fromTextArea(rawTextarea, {
         mode: "typst",
@@ -37,12 +43,29 @@ function init(textareaId) {
         autoCloseBrackets: true,
         extraKeys: {
             "Ctrl-Enter": () => dispatchCustomEvent('manualCompile'),
-            "Cmd-Enter": () => dispatchCustomEvent('manualCompile')
+            "Cmd-Enter": () => dispatchCustomEvent('manualCompile'),
+            "Ctrl-Space": "autocomplete"
+        },
+        hintOptions: {
+            completeSingle: false,
+            alignWithWord: true
         }
     });
 
     // Style and Sync
     editorInstance.setSize(null, "100%");
+
+    // Input Listener for Auto-Hint
+    editorInstance.on("inputRead", function(cm, change) {
+        if (change.origin !== "+input") return;
+        if (/^[a-zA-Z#]/.test(change.text[0])) {
+            setTimeout(() => {
+                if (!cm.state.completionActive) { 
+                    cm.showHint({completeSingle: false});
+                }
+            }, 100);
+        }
+    });
     
     // Sync changes back to raw textarea for form compatibility
     editorInstance.on('change', (cm) => {

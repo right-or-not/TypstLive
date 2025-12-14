@@ -27,12 +27,12 @@ a {
     padding: 12px 0;
     background-color: rgb(246, 246, 246);
     border-bottom: 1px solid rgb(215, 215, 215);
-    z-index: 2000;
+    z-index: 999;
 }
 
 .header-container {
-    max-width: 1280px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 0 1%;
     padding: 0 8px;
     display: flex;
     justify-content: space-between;
@@ -74,8 +74,8 @@ a {
 }
 
 .nav-btn {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,8 +97,8 @@ a {
 }
 
 .nav-btn svg {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     stroke-width: 2.5px;
 }
 
@@ -107,12 +107,36 @@ a {
     margin: 0;
 }
 
+/* Avatar in Header */
+.nav-avatar-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.nav-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e1e4e8;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.nav-avatar:hover {
+    border-color: #0969da; /* 悬停时边框变蓝 */
+    transform: scale(1.05); /* 微微放大 */
+    box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.2); /* 光晕效果 */
+}
+
 /* Main Content */
 .main-content {
     flex: 1;
     width: 100%;
     max-width: 70%;
-    margin: 70px auto;
+    margin: 0 auto;
     padding: 0 32px;
 }
 

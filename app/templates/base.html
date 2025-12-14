@@ -11,6 +11,8 @@
     <!-- css for syntax-highlight -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/github.min.css">
+    <!-- css for show hint -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.css">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -46,6 +48,9 @@
                         </svg>
                     </button>
                 </form>
+                <a href="{{ url_for('main.profile') }}" class="nav-avatar-link" title="My Profile">
+                    <img src="{{ current_user.get_avatar_url() }}" alt="{{ current_user.username }}" class="nav-avatar">
+                </a>
             </nav>
         </div>
     </header>
@@ -86,6 +91,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/hint/show-hint.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

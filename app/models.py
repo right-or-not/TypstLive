@@ -33,7 +33,7 @@ class User(UserMixin, db.Model):
     def get_avatar_url(self):
         """ get avatar URL """
         if self.avatar_path:
-            if self.avatar_path.startswith("static/"):
+            if self.avatar_path.startswith("static/images/avatars"):
                 return f"/{self.avatar_path}"
             return f"/static/images/avatars/{self.avatar_path}"
         return "/static/images/avatars/default/avator-female.png" if self.gender == "Female" else "/static/images/avatars/default/avator-male.png"
