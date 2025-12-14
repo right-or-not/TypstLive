@@ -63,14 +63,33 @@
 }
 
 /* Syntax highlighting colors for CodeMirror */
-.cm-s-default .cm-keyword { color: #d73a49; font-weight: 600; }
-.cm-s-default .cm-builtin { color: #6f42c1; font-weight: 600; }
-.cm-s-default .cm-string { color: #0969da; }
-.cm-s-default .cm-math { color: #0969da; font-style: italic; }
+/* Normal highlight */
+.cm-s-default .cm-keyword { color: #d73a49; font-weight: bold; } /* let, set */
+.cm-s-default .cm-builtin { color: #6f42c1; font-weight: bold; } /* #func */
+.cm-s-default .cm-string { color: #0a3069; }
 .cm-s-default .cm-number { color: #005cc5; }
 .cm-s-default .cm-operator { color: #d73a49; }
 .cm-s-default .cm-comment { color: #6a737d; font-style: italic; }
-.cm-s-default .cm-bracket { color: #24292f; font-weight: bold; }
+.cm-s-default .cm-bracket { color: #24292f; }
+/* MathType highlight */
+.cm-s-default .cm-math-delimiter { 
+    color: #e36209;
+    font-weight: bold;
+}
+
+.cm-s-default .cm-math-operator { 
+    color: #d73a49;
+}
+
+.cm-s-default .cm-math-builtin { 
+    color: #005cc5;
+    font-style: italic;
+}
+
+.cm-s-default .cm-math-variable { 
+    color: #24292f;
+    font-style: italic;
+}
 
 /* Line numbers styling */
 .CodeMirror-linenumber {

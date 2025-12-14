@@ -4,6 +4,7 @@
 // Private Variable
 let editorInstance = null;
 let rawTextarea = null;
+let _forceMathMode = false;
 
 
 /**
@@ -72,32 +73,87 @@ function dispatchCustomEvent(eventName) {
  */
 function defineTypstMode() {
     CodeMirror.defineMode("typst", function() {
+        const keywords = /^(?:let|set|show|import|include|return|if|else|for|while|break|continue)\b/;
+        const builtins = /^(?:heading|strong|emph|link|image|rect|block|page|text|par|align|grid|stack)\b/;
+        const mathBuiltins = /^(?:alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|sum|prod|int|sqrt|log|ln|lim|sup|inf|max|min|sin|cos|tan|cot|csc|sec|arcsin|arccos|arctan)\b/;
+
         return {
+            startState: function() {
+                return {
+                    inComment: false,
+                    inMath: _forceMathMode,
+                    inString: false
+                };
+            },
             token: function(stream, state) {
-                // Math mode ($...$)
-                if (stream.match(/\$[^\$]*\$/)) return "string math";
-                // Comments
-                if (stream.match(/\/\/.*/)) return "comment";
-                // Block comments
-                if (stream.match(/\/\*/)) { state.inComment = true; return "comment"; }
+                // 1. 处理块级注释 (优先级最高)
                 if (state.inComment) {
                     if (stream.match(/\*\//)) { state.inComment = false; return "comment"; }
                     stream.next(); return "comment";
                 }
-                // Keywords/Functions
-                if (stream.match(/\\[a-zA-Z]+/)) return "keyword";
-                if (stream.match(/#[a-zA-Z_][a-zA-Z0-9_]*/)) return "builtin";
-                // Numbers & Units
-                if (stream.match(/\b\d+(\.\d+)?(em|pt|mm|cm|in)?\b/)) return "number";
-                // Operators
-                if (stream.match(/[\+\-\*\/\=\<\>\^\_]/)) return "operator";
-                // Brackets
+                if (stream.match(/\/\*/)) { state.inComment = true; return "comment"; }
+
+                // 2. 处理行内注释 (//)
+                // 注意：在 URL 或字符串中不应该触发，这里做简单处理
+                if (stream.match(/\/\/.*/)) return "comment";
+
+                // 3. 处理字符串 (允许在数学模式中出现字符串)
+                if (state.inString) {
+                    if (stream.match('"')) { state.inString = false; return "string"; }
+                    if (stream.match('\\"')) { return "string"; } // 转义引号
+                    stream.next(); return "string";
+                }
+                if (stream.match('"')) { state.inString = true; return "string"; }
+
+                // 4. --- 数学模式处理逻辑 ---
+                if (state.inMath) {
+                    // $: Out of MathType
+                    if (stream.match('$')) {
+                        state.inMath = false;
+                        return "math-delimiter";
+                    }
+
+                    // #
+                    if (stream.match(/#[a-zA-Z_][a-zA-Z0-9_]*/)) return "builtin";
+                    // Math Operation (+, -, =, =>, ->, <, >, etc.)
+                    if (stream.match(/^(?:=>|->|<-|!=|<=|>=|<<|>>|\.\.\.|\+|-|\*|\/|=|<|>|!|&|\||\^|~|_)/)) return "math-operator";
+                    // Function or Character
+                    if (stream.match(mathBuiltins)) return "math-builtin";
+                    // Number
+                    if (stream.match(/\b\d+(\.\d+)?\b/)) return "number";
+                    // Normal variable
+                    if (stream.match(/^[a-zA-Z][a-zA-Z0-9_]*/)) return "math-variable";
+                    // ()
+                    if (stream.match(/[\(\)\[\]\{\}]/)) return "bracket";
+
+                    // Other Character
+                    stream.next();
+                    return null;
+                }
+
+                // 5. --- 普通文本模式处理逻辑 ---
+                // $: Enter MathType
+                if (stream.match('$')) {
+                    state.inMath = true;
+                    return "math-delimiter";
+                }
+
+                // Typst Tag with #
+                if (stream.match(/^#[a-zA-Z_][a-zA-Z0-9_]*/)) return "builtin";
+                // Typst Tag without #
+                if (stream.match(keywords)) return "keyword";
+                // \
+                if (stream.match(/\\[^ \t\n]/)) return "keyword";
+                // Number
+                if (stream.match(/\b\d+(\.\d+)?(em|pt|mm|cm|in|fr|%)?\b/)) return "number";
+                // Operator
+                if (stream.match(/[\*\=\_\-\+\/<>!]/)) return "operator";
+                // ()
                 if (stream.match(/[\(\)\[\]\{\}]/)) return "bracket";
-                
+
                 stream.next();
                 return null;
-            },
-            startState: function() { return { inComment: false }; }
+            }
         };
     });
 }
@@ -147,6 +203,18 @@ function isReady() {
     return !!editorInstance;
 }
 
+/**
+ * Force into MathType
+ * @param {boolean} isMath 
+ */
+function setMathMode(isMath) {
+    _forceMathMode = isMath;
+
+    if (editorInstance) {
+        editorInstance.setOption("mode", "typst");
+    }
+}
+
 // Export CodeMirrorAPI
 export const CodeMirrorAPI = {
     init,
@@ -154,5 +222,6 @@ export const CodeMirrorAPI = {
     setValue,
     focus,
     onChange,
-    isReady
+    isReady,
+    setMathMode
 };

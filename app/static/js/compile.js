@@ -1,5 +1,6 @@
 // static/js/compile.js
 import { CodeMirrorAPI } from './syntax-highlight.js';
+import { EditorAPI } from './editor.js';
 
 // Configuration
 const COMPILE_DELAY = 300; // Debounce delay in ms
@@ -91,7 +92,8 @@ function initSocket() {
  */
 function compileCode() {
     // 1. Get code from API (Source of Truth)
-    const code = CodeMirrorAPI.getValue().trim();
+    let code = CodeMirrorAPI.getValue().trim();
+    const env = EditorAPI.getCurrentEnvironment();
     
     // 2. Handle empty code
     if (!code) {
@@ -101,11 +103,20 @@ function compileCode() {
     }
     
     // 3. Emit if connected
+    // change code according to environment
+    if (env === 'inline-formula') {
+        code = `$${code}$`
+    }
+    if (env === 'interline-formula') {
+        code = `$ ${code} $`
+    }
+    console.log(`[Compile] Environment: ${env}, Payload: ${code}`);
+
     if (socket && socket.connected) {
         socket.emit('compile', { code: code });
     } else {
         // Silent fail or minimal UI update if just typing
-        // errorArea.textContent = 'Socket unconnected...';
+        errorArea.textContent = 'Socket unconnected...';
     }
 }
 

@@ -56,6 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // 2. Switch Context
         const oldEnvironment = currentEnvironment;
         currentEnvironment = env;
+
+        // set Math Environment
+        const isMathMode = (env === 'inline-formula' || env === 'interline-formula');
+        CodeMirrorAPI.setMathMode(isMathMode);
         
         // Update UI buttons
         document.querySelectorAll('.environment-select button').forEach(btn => btn.classList.remove('active'));
@@ -63,15 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 3. Load content of NEW environment
         const newContent = environmentStorage[env] || '';
-        
-        // Replaces: window.typstEditor.setValue(newContent)
         CodeMirrorAPI.setValue(newContent);
-        
-        // 4. Focus editor
-        // Replaces: window.typstEditor.focus()
         CodeMirrorAPI.focus();
 
-        console.log(`[setEnvironment] Switched to ${currentEnvironment}`);
+        console.log(`[setEnvironment] Switched from ${oldEnvironment} to ${currentEnvironment}`);
         
         // Update placeholders (Direct DOM manipulation is fine for attributes)
         if (typstCodeTextarea) {
@@ -142,6 +141,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (environmentStorage[currentEnvironment]) {
         CodeMirrorAPI.setValue(environmentStorage[currentEnvironment]);
     }
+
+    if (currentEnvironment === 'inline-formula' || currentEnvironment === 'interline-formula') {
+        CodeMirrorAPI.setMathMode(true);
+    }
     
     // Add Tooltips
     likeBtn.setAttribute('title', 'Save to favorites (Ctrl+L)');
@@ -178,14 +181,12 @@ function getCurrentCode() {
     return CodeMirrorAPI.getValue();
 }
 
-// Expose to window for legacy scripts (like compile.js if it's not a module yet)
-window.EditorAPI = {
-    getCurrentEnvironment: getCurrentEnvironment,
-    getCurrentCode: getCurrentCode
-};
 
 // Export EditorAPI
 export const EditorAPI = {
     getCurrentEnvironment,
     getCurrentCode
 };
+
+// Export to windows
+window.EditorAPI = EditorAPI;
