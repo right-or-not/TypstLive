@@ -80,7 +80,7 @@ a {
     align-items: center;
     justify-content: center;
     background-color: transparent;
-    border: 2px solid rgba(23, 157, 173, 0.3);
+    border: 2.5px solid rgba(23, 157, 173, 0.3);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
@@ -97,8 +97,9 @@ a {
 }
 
 .nav-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.5px;
 }
 
 .logout-form {
