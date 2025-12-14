@@ -116,7 +116,7 @@ function debouncedCompile() {
  */
 function clearEditor() {
     typstCodeTextarea.value = '';
-    previewArea.innerHTML = '<p style="color: #666;">公式预览将显示在这里...</p>';
+    previewArea.innerHTML = '<p style="color: #666;">Output will be Shown Here!</p>';
     errorArea.textContent = '';
 }
 

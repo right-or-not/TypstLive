@@ -146,18 +146,22 @@ function getEditorContent() {
 function setEditorContent(content) {
     if (window.typstEditor) {
         window.typstEditor.setValue(content);
+        window.typstEditor.focus();
     } else {
         const textarea = document.getElementById('typst-code');
         if (textarea) {
             textarea.value = content;
+            textarea.focus();
         }
     }
 }
 
+// Show CodeMirror State
 function isCodeMirrorReady() {
     return !!window.typstEditor;
 }
 
+// Wait function
 function waitForCodeMirror(callback, timeout = 5000) {
     const startTime = Date.now();
     const checkInterval = setInterval(() => {
@@ -173,8 +177,10 @@ function waitForCodeMirror(callback, timeout = 5000) {
     }, 50);
 }
 
-// export to windows
-window.getEditorContent = getEditorContent;
-window.setEditorContent = setEditorContent;
-window.isCodeMirrorReady = isCodeMirrorReady;
-window.waitForCodeMirror = waitForCodeMirror;
+// Export CodeMirror API
+window.CodeMirrorAPI = {
+    getValue: getEditorContent,
+    setValue: setEditorContent,
+    isReady: isCodeMirrorReady,
+    wait: waitForCodeMirror
+};

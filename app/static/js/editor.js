@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function setEnvironment(env, button) {
         // Store content of current environment
         if (currentEnvironment && typstCodeTextarea) {
-            environmentStorage[currentEnvironment] = typstCodeTextarea;
+            const currentContent = window.typstEditor ? window.typstEditor.getValue() : typstCodeTextarea.value;
+            environmentStorage[currentEnvironment] = currentContent;
             console.log(`[setEnvironment] Save the content in ${currentEnvironment}`)
             console.log('environmentStorage: ', environmentStorage);
         }
@@ -53,17 +54,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // add the content of new environment
-        if (typstCodeTextarea) {
-            const newContent = environmentStorage[env] || '';
-
-            if (window.typstEditor) {
-                window.typstEditor.setValue(newContent);
-            } else {
-                typstCodeTextarea = newContent;
-            }
-
-            console.log(`[setEnvironment] Add the content in Environment ${currentEnvironment}`)
+        const newContent = environmentStorage[env] || '';
+        if (window.typstEditor) {
+            window.typstEditor.setValue(newContent);
         }
+        if (typstCodeTextarea) {
+            typstCodeTextarea.value = newContent;
+        }
+        console.log(`[setEnvironment] Add the content in Environment ${currentEnvironment}`)
         
         // Update textarea placeholder based on environment
         switch(env) {
@@ -133,7 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (window.typstEditor) {
                     window.typstEditor.setValue(''),
                     window.typstEditor.focus();
-                } else if (typstCodeTextarea) {
+                } 
+                if (typstCodeTextarea) {
                     typstCodeTextarea.value = '';
                     typstCodeTextarea.focus();
                 }
@@ -166,7 +165,8 @@ document.addEventListener('DOMContentLoaded', function() {
         window.typstEditor.on('change', function(cm) {
             environmentStorage[currentEnvironment] = cm.getValue();
         });
-    } else if (typstCodeTextarea) {
+    }
+    if (typstCodeTextarea) {
         typstCodeTextarea.addEventListener('input', function() {
             environmentStorage[currentEnvironment] = this.value;
         });
@@ -176,7 +176,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (environmentStorage[currentEnvironment]) {
         if (window.typstEditor) {
             window.typstEditor.setValue(environmentStorage[currentEnvironment]);
-        } else if (typstCodeTextarea) {
+        } 
+        if (typstCodeTextarea) {
             typstCodeTextarea.value = environmentStorage[currentEnvironment];
         }
     }
@@ -227,7 +228,10 @@ document.addEventListener('DOMContentLoaded', function() {
     addTooltips();
 });
 
-// Export environment state for use by compile.js
+/** 
+ * get current environment state
+ * @returns {string} 'passage', 'inline-formula', 'interline-formula'
+*/
 function getCurrentEnvironment() {
     const activeBtn = document.querySelector('.environment-select button.active');
     if (activeBtn) {
@@ -237,3 +241,19 @@ function getCurrentEnvironment() {
     }
     return 'inline-formula'; // default
 }
+
+/**
+ * get current code content
+ * @returns {string} code in current environment
+ */
+function getCurrentCode() {
+    const typstCodeTextarea = document.getElementById('typst-code');
+    return typstCodeTextarea ? typstCodeTextarea.value : '';
+}
+
+
+// Export Editor API
+window.EditorAPI = {
+    getCurrentEnvironment: getCurrentEnvironment,
+    getCurrentCode: getCurrentCode
+};
