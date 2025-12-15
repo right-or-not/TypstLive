@@ -3,17 +3,17 @@
 /* Improve textarea appearance */
 #typst-code {
     /* Better syntax visibility with color scheme */
-    color: #24292f;
-    caret-color: #0969da;
+    color: black;
+    caret-color: #239DAD;
 }
 
 /* Selection styling */
 #typst-code::selection {
-    background-color: rgba(9, 105, 218, 0.25);
+    background-color: rgba(12, 78, 85, 0.25);
 }
 
 #typst-code::-moz-selection {
-    background-color: rgba(9, 105, 218, 0.25);
+    background-color: rgba(12, 78, 85, 0.25);
 }
 
 /* Line height for better readability */
@@ -26,6 +26,7 @@
     height: 100% !important;
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
     font-size: 14px !important;
+    font-weight: 500;
     line-height: 1.6 !important;
     background-color: #f6f8fa !important;
 }

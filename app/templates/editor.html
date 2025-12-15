@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/editor.css') }}">
 <!-- highlight Typst Files -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/syntax-highlight.css') }}">
+<!-- hint Typst Files -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/hint.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -52,4 +54,6 @@
 <script type="module" src="{{ url_for('static', filename='js/compile.js') }}"></script>
 <!-- highlight Typst Code -->
 <script type="module" src="{{ url_for('static', filename='js/syntax-highlight.js') }}"></script>
+<!-- hint Typst Files -->
+ <script type="module" src="{{ url_for('static', filename='js/hint.js') }}"></script>
 {% endblock %}
