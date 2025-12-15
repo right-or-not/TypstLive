@@ -151,9 +151,6 @@ const ToolboxController = {
         if (this.elements.openBtn) {
             this.elements.openBtn.addEventListener('click', () => this.open());
         }
-
-        // Initialize default state (Closed as per your previous code)
-        this.close(); 
     },
 
     close() {
