@@ -9,6 +9,13 @@ from flask_socketio import emit, disconnect
 from app import socketio
 
 
+# Prelude Code
+TYPST_PRELUDE = """
+#set page(width: auto, height: auto, margin: 0pt)
+#set text(font: ("Linux Libertine", "Source Han Serif SC"), size: 12pt)
+"""
+
+
 class TypstRealtimeCompiler:
     """Typst Realtime Compiler"""
     def __init__(self, user_id=None, session_id=None):
@@ -26,6 +33,7 @@ class TypstRealtimeCompiler:
             # build temp file
             input_file = os.path.join(self.temp_dir, "input.typ")
             output_file = os.path.join(self.temp_dir, "output.svg")
+            full_code = TYPST_PRELUDE + "\n" + typst_code
             
             # write Typst Code 
             with open(input_file, 'w', encoding='utf-8') as f:
@@ -53,9 +61,10 @@ class TypstRealtimeCompiler:
                     'compile_count': self.compile_count
                 }
             else:
+                error_msg = result.stderr or "Compile Failed"
                 return {
                     'success': False,
-                    'error': result.stderr or "Compile Failed"
+                    'error': self._process_error_message(error_msg)
                 }
                 
         except subprocess.TimeoutExpired:
@@ -74,6 +83,9 @@ class TypstRealtimeCompiler:
                 'error': f'Compile Error: {str(e)}'
             }
     
+    def _process_error_message(self, error_msg):
+        """process error message"""
+        return error_msg
     
     def cleanup(self):
         """clean temp files"""
