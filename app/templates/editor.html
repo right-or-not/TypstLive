@@ -13,38 +13,58 @@
 
 {% block content %}
 <div class="blank" style="padding: 35px 0; margin: 0;"></div>
-<section class="editor-section">            
-    <div class="editor-container">
-        <!-- Input: Typst Code Editor -->
-        <article class="code-panel">
-            <div class="title">Input Area</div>
-            <div class="selections-container">
-                <div class="environment-select">
-                    <button type="button" id="passage-btn">Passage</button>
-                    <button type="button" id="inline-formula-btn">Inline Formula</button>
-                    <button type="button" id="interline-formula-btn">Interline Formula</button>
+
+<div class="main-wrapper" id="main-wrapper">
+    
+    <aside class="toolbox" id="toolbox">
+        <div class="toolbox-header">
+            <span class="toolbox-title">Toolbox</span>
+            <button class="toolbox-toggle-btn" id="toolbox-close-btn" title="Close ToolBox">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="toolbox-content">
+            <p style="color: #666; font-size: 13px; padding: 20px;">Toolbox Content</p>
+        </div>
+    </aside>
+
+    <button class="toolbox-open-btn" id="toolbox-open-btn" title="Open ToolBox" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+    </button>
+
+    <section class="editor-section">        
+        <div class="editor-container" id="editor-container">
+            <article class="code-panel">
+                <div class="title">Input Area</div>
+                <div class="selections-container">
+                    <div class="environment-select">
+                        <button type="button" id="passage-btn">Passage</button>
+                        <button type="button" id="inline-formula-btn">Inline Formula</button>
+                        <button type="button" id="interline-formula-btn">Interline Formula</button>
+                    </div>
+                    <div class="button-group">
+                        <button type="button" id="like-btn" title="Like(Ctrl+K)"></button>
+                        <button type="button" id="clear-btn" title="Clear(Ctrl+C)"></button>
+                    </div>
                 </div>
-                <div class="button-group">
-                    <button type="button" id="like-btn" title="Like(Ctrl+K)"></button>
-                    <button type="button" id="clear-btn" title="Clear(Ctrl+C)"></button>
+                <textarea 
+                    id="typst-code" 
+                    placeholder="Input Typst Code Here"
+                    aria-label="Typst Editor"></textarea>
+            </article>
+            
+            <article class="preview-panel">
+                <div class="title">Output Area</div>
+                <div id="preview-area" role="region" aria-label="Output Preview Area">
+                    <p style="color: #666;">Output will be Shown Here!</p>
                 </div>
-            </div>
-            <textarea 
-                id="typst-code" 
-                placeholder="Input Typst Code Here"
-                aria-label="Typst Editor"></textarea>
-        </article>
-        
-        <!-- Output: SVG Figure Preview -->
-        <article class="preview-panel">
-            <div class="title">Output Area</div>
-            <div id="preview-area" role="region" aria-label="Output Preview Area">
-                <p style="color: #666;">Output will be Shown Here!</p>
-            </div>
-            <div id="error-area" role="alert" aria-live="polite"></div>
-        </article>
-    </div>
-</section>
+                <div id="error-area" role="alert" aria-live="polite"></div>
+            </article>
+        </div>
+    </section>
+</div>
 {% endblock %}
 
 {% block extra_js %}

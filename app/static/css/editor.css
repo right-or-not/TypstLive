@@ -1,15 +1,135 @@
-/* Editor Section Layout */
-.editor-section {
+/* =========================================
+   Layout & Toolbox Styles
+   ========================================= */
+
+/* 1. Main Wrapper */
+.main-wrapper {
+    display: flex;
     width: 100%;
-    padding: 20px 0;
+    /* 确保高度填满，减去 header 的高度 */
+    min-height: calc(100vh - 80px); 
+    position: relative;
+    overflow-x: hidden; /* 防止滑动时出现横向滚动条 */
 }
 
+/* 2. Toolbox Styling */
+.toolbox {
+    width: 280px;
+    background-color: #f6f8fa;
+    border-right: 1px solid #e1e4e8;
+    flex-shrink: 0; /* 防止被压缩 */
+    
+    /* 核心动画：只控制 margin-left */
+    transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    margin-left: 0; /* 默认展开 */
+}
+
+.toolbox-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.toolbox-title {
+    font-weight: 700;
+    color: #24292f;
+}
+
+.toolbox-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    color: #57606a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toolbox-toggle-btn:hover {
+    background-color: rgba(0,0,0,0.05);
+    color: #0969da;
+}
+
+/* 3. Floating Open Button */
+.toolbox-open-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 20;
+    background: white;
+    border: 1px solid #d0d7de;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #57606a;
+    transition: all 0.2s;
+}
+
+.toolbox-open-btn:hover {
+    color: #0969da;
+    border-color: #0969da;
+}
+
+/* 4. Editor Section Wrapper */
+.editor-section {
+    flex-grow: 1; /* 占据剩余空间 */
+    display: flex;
+    justify-content: center; /* 让内部的 container 始终居中 */
+    padding: 20px;
+    background-color: #fff;
+    /* 注意：这里不需要动画，因为 flex 布局会自动处理剩余空间的分配 */
+}
+
+/* 5. Editor Container (固定宽度，只移动不缩放) */
 .editor-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 100%;
+    width: 70vw; /* 始终保持屏幕宽度的 70% */
+    max-width: 1200px; /* 设置最大上限 */
+    min-width: 800px;  /* 设置最小下限，防止被侧边栏挤压太小 */
 }
+
+/* --- State: Toolbox CLOSED --- */
+/* 当通过 JS 添加 .toolbox-closed 类时 */
+
+.main-wrapper.toolbox-closed .toolbox {
+    margin-left: -280px; /* 移出屏幕 */
+}
+
+/* 注意：这里不再需要写 .main-wrapper.toolbox-closed .editor-container 的样式
+   因为 flex 布局会自动让 editor-section 变宽，
+   而 editor-container 始终保持 70vw 居中，视觉效果就是向左平移回到了正中间。
+*/
+
+/* Editor Section Layout
+.editor-section {
+    flex: 1;
+    max-width: 100%;
+    min-width: 50%;
+    margin: 0 auto;
+    padding: 20px 32px;
+} */
+
+/* .editor-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+} */
 
 /* Common Panel Styles */
 .code-panel,
