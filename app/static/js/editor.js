@@ -251,6 +251,23 @@ const ToolboxController = {
         const panel = document.createElement('div');
         panel.className = 'toolbox-detail-panel';
 
+        // search longest items.code
+        let maxCodeLength = 0;
+        items.forEach(item => {
+            if (item.code && item.code.length > maxCodeLength)
+                maxCodeLength = item.code.length;
+        });
+
+        // select style according to maxCodeLength
+        if (maxCodeLength <= 5) 
+            panel.classList.add('panel-cols-six');
+        else if (maxCodeLength <= 18)
+            panel.classList.add('panel-cols-four');
+        else if (maxCodeLength <= 28)
+            panel.classList.add('panel-cols-three');
+        else
+            panel.classList.add('panel-cols-two');
+
         items.forEach(item => {
             const btn = document.createElement('div');
             btn.className = 'toolbox-tool-btn';
