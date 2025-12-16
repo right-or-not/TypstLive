@@ -38,6 +38,8 @@
 
 .toolbox-title {
     font-weight: 700;
+    font-size: 20px;
+    line-height: 32px;
     color: #24292f;
 }
 
@@ -328,7 +330,8 @@
 /* Preview Panel - Output Area */
 .preview-panel {
     position: relative;
-    height: 300px; /* Fixed height for output area */
+    height: auto;
+    min-height: 300px;
 }
 
 #preview-area {
@@ -337,10 +340,11 @@
     background-color: #ffffff;
     border: 1px solid #d0d7de;
     border-radius: 6px;
-    padding: 20px;
     overflow: auto; /* Enable both horizontal and vertical scrolling */
     position: relative;
     margin: 10px 0;
+    padding: 10px 50px;
+    display: flex;
 }
 
 /* Fix for SVG display - Remove flex centering that was hiding content */
@@ -354,6 +358,11 @@
     display: block;
     max-width: none;
     height: auto;
+}
+
+#preview-area[data-environment="interline-formula"] img,
+#preview-area[data-environment="interline-formula"] svg {
+    margin: 0 auto;
 }
 
 /* Placeholder text styling */

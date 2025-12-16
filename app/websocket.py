@@ -11,8 +11,8 @@ from app import socketio
 
 # Prelude Code
 TYPST_PRELUDE = """
-#set page(width: auto, height: auto, margin: 0pt)
-#set text(font: ("Linux Libertine", "Source Han Serif SC"), size: 12pt)
+#set page(width: auto, height: auto, margin: 5pt)
+#set text(font: ("Linux Libertine", "Source Han Serif SC"), size: 24pt)
 """
 
 
@@ -37,7 +37,7 @@ class TypstRealtimeCompiler:
             
             # write Typst Code 
             with open(input_file, 'w', encoding='utf-8') as f:
-                f.write(typst_code)
+                f.write(full_code)
             
             # run typst compile
             result = subprocess.run(

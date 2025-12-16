@@ -15,9 +15,9 @@ const EnvironmentController = {
         'inline-formula': '',
         'interline-formula': ''
     },
-    current: 'inline-formula',
+    current: 'interline-formula',
     
-    // DOM Elements (Lazy loaded in init)
+    // DOM Elements
     elements: {},
 
     init() {
@@ -47,9 +47,7 @@ const EnvironmentController = {
         });
 
         // Initial State Setup
-        if (this.elements.buttons.inline) {
-            this.elements.buttons.inline.classList.add('active');
-        }
+        this.updateUI(this.current);
         
         // Restore content if exists
         if (this.storage[this.current]) {
@@ -113,6 +111,11 @@ const EnvironmentController = {
                 'interline-formula': 'Input Typst display formula Here'
             };
             this.elements.textarea.placeholder = placeholders[env] || '';
+        }
+
+        // Update PreviewArea Property
+        if (this.elements.preview) {
+            this.elements.preview.setAttribute('data-environment', env);
         }
     },
 
