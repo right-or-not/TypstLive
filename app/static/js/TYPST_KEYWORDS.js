@@ -1,4 +1,4 @@
-// app/static/js/TypstKeywords.js
+// app/static/js/TYPST_KEYWORDS.js
 
 export const TYPST_KEYWORDS = [
     // ==========================================

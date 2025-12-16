@@ -1,6 +1,7 @@
 // static/js/editor.js
 
 import { CodeMirrorAPI } from './code-mirror.js';
+import { TOOLBOX_DATA } from './TOOLBOX_DATA.js';
 
 /**
  * =================================================================
@@ -138,23 +139,146 @@ const EnvironmentController = {
  * Handles the sidebar opening, closing, and animation logic.
  * =================================================================
  */
+const ITEMS_PER_ROW = 3;
 const ToolboxController = {
     elements: {},
+    activeGroupId: null,
 
     init() {
         this.elements = {
             wrapper: document.getElementById('main-wrapper'),
             closeBtn: document.getElementById('toolbox-close-btn'),
-            openBtn: document.getElementById('toolbox-open-btn')
+            openBtn: document.getElementById('toolbox-open-btn'),
+            content: document.querySelector('.toolbox-content')
         };
 
-        if (this.elements.closeBtn) {
+        if (this.elements.closeBtn)
             this.elements.closeBtn.addEventListener('click', () => this.close());
-        }
-        if (this.elements.openBtn) {
+        if (this.elements.openBtn) 
             this.elements.openBtn.addEventListener('click', () => this.open());
-        }
+
+        // Render Group List
+        this.renderGroups();
     },
+
+    /**
+     * Render Group
+     */
+    renderGroups() {
+        if (!this.elements.content) return;
+
+        // Create Group Grid div
+        const grid = document.createElement('div');
+        grid.className = 'toolbox-grid';
+        this.elements.content.innerHTML = '';
+        this.elements.content.appendChild(grid);
+
+        // Create Group button
+        TOOLBOX_DATA.forEach((group, index) => {
+            const groupBtn = document.createElement('div');
+            groupBtn.className = 'toolbox-group-item';
+            groupBtn.dataset.id = group.id;
+            groupBtn.dataset.index = index;
+
+            groupBtn.innerHTML = `
+                <div class="toolbox-group-icon">${group.icon}</div>
+                <div class="toolbox-group-name">${group.name}</div>
+            `;
+
+            // add Click Listener
+            groupBtn.addEventListener('click', (e) => {
+                // taggle this Group
+                this.toggleGroup(group, index, grid);
+            })
+
+            grid.appendChild(groupBtn);
+        })
+    },
+
+    /**
+     * Toggle Group
+     */
+    toggleGroup(group, index, gridContainer) {
+        // active Group: close this detail panel
+        if (this.activeGroupId === group.id) {
+            this.closeDetailPanel();
+            return;
+        }
+
+        // close old detail panel
+        this.closeDetailPanel();
+
+        // activate new detail panel
+        const newActiveBtn = gridContainer.children[index];
+        newActiveBtn.classList.add('active');
+        this.activeGroupId = group.id;
+
+        // insert detail panel
+        const rowNumber = Math.floor(index / ITEMS_PER_ROW);
+        const lastIndexInRow = Math.min(
+            (rowNumber + 1) * ITEMS_PER_ROW - 1,
+            gridContainer.children.length - 1
+        );  // insert location
+        const referenceNode = gridContainer.children[lastIndexInRow];
+        // new panel
+        const panel = this.createDetailPanel(group.items);
+        // insert new panel
+        if (referenceNode.nextSibling) gridContainer.insertBefore(panel, referenceNode.nextSibling);
+        else gridContainer.appendChild(panel);
+    },
+
+    /**
+     * Close Detail Panel
+     */
+    closeDetailPanel() {
+        // Remove DOM
+        const existingPanel = document.querySelector('.toolbox-detail-panel');
+        if (existingPanel) existingPanel.remove();
+
+        // Remove activate style
+        const activeBtns = document.querySelectorAll('.toolbox-group-item.active');
+        activeBtns.forEach(btn => btn.classList.remove('active'));
+
+        // reset activeGroupId
+        this.activeGroupId = null;
+    },
+
+
+    /**
+     * Create Detail Panel
+     */
+    createDetailPanel(items) {
+        const panel = document.createElement('div');
+        panel.className = 'toolbox-detail-panel';
+
+        items.forEach(item => {
+            const btn = document.createElement('div');
+            btn.className = 'toolbox-tool-btn';
+            btn.title = item.desc || item.code;
+            btn.innerHTML = `
+                <div class="tool-display">${item.display}</div>
+                <div class="tool-code">${item.code}</div>
+            `;
+
+            // add Click Listener
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (CodeMirrorAPI && typeof CodeMirrorAPI.insertText === 'function') {
+                    const codeToInsert = item.code + " ";
+                    const moveOffset = item.move || 0;
+                    CodeMirrorAPI.insertText(codeToInsert, moveOffset);
+                } else {
+                    console.error("CodeMirrorAPI.insertText is not available")
+                }
+                
+            })
+
+            panel.appendChild(btn);
+        });
+
+        return panel;
+    },  
+
 
     close() {
         this.elements.wrapper.classList.add('toolbox-closed');

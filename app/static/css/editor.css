@@ -484,3 +484,116 @@
         font-size: 13px;
     }
 }
+
+
+/* --- Toolbox Content Grid --- */
+
+/* 1. Group Container (3 columns) */
+.toolbox-grid {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    gap: 10px;
+}
+
+/* 2. Group Item (The button to click) */
+.toolbox-group-item {
+    /* (100% - gap * 2) / 3 */
+    width: calc((100% - 20px) / 3); 
+    aspect-ratio: 1 / 1; /* 正方形 */
+    background: #ffffff;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.toolbox-group-item:hover {
+    border-color: #0969da;
+    background-color: #f6f8fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.toolbox-group-item.active {
+    background-color: #e6f2ff; /* 激活时的背景色 */
+    border-color: #0969da;
+}
+
+.toolbox-group-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+    font-family: 'Times New Roman', serif;
+}
+
+.toolbox-group-name {
+    font-size: 11px;
+    color: #57606a;
+    text-align: center;
+}
+
+/* 3. Detail Panel (The expanded area) */
+.toolbox-detail-panel {
+    width: 100%; /* Force line break */
+    background: #f8f9fa;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    margin-top: 5px;
+    padding: 10px;
+    display: grid;
+    /* 6 columns as requested */
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 6px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    
+    /* Animation */
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 4. Tool Item (The actual symbol button) */
+.toolbox-tool-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 4px;
+    padding: 6px 2px;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.toolbox-tool-btn:hover {
+    border-color: #0969da;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.tool-display {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.tool-code {
+    font-size: 9px;
+    color: #8c959f;
+    font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+    width: 100%;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.2;
+    margin-top: 2px;
+}

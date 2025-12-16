@@ -238,13 +238,37 @@ function setMathMode(isMath) {
     }
 }
 
+/**
+ * Insert text at current cursor position
+ * @param {string} text - The code to insert
+ * @param {number} moveCursor - How many characters to move the Cursor BACK after insertion (default 0)
+ */
+function insertText(text, moveCursor = 0) {
+    if (!editorInstance) return;
+    const doc  = editorInstance.getDoc();
+    const cursor = doc.getCursor();
+    doc.replaceRange(text, cursor);
+    const endPosition = {
+        line: cursor.line,
+        ch: cursor.ch + text.length
+    };
+    const finalPosition = {
+        line: endPosition.line,
+        ch: endPosition.ch - moveCursor
+    };
+    doc.setCursor(finalPosition);
+    editorInstance.focus();
+}
+
+
 // Export CodeMirrorAPI
 export const CodeMirrorAPI = {
     init,
     getValue,
     setValue,
-    focus,
+    focus: () => editorInstance?.focus(),
     onChange,
     isReady,
-    setMathMode
+    setMathMode,
+    insertText
 };
