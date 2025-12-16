@@ -341,23 +341,61 @@ const ToolboxController = {
  */
 const ActionController = {
     init() {
+        const transformBtn = document.getElementById('transform-btn');
         const likeBtn = document.getElementById('like-btn');
         const clearBtn = document.getElementById('clear-btn');
+        const copyBtn = document.getElementById('copy-btn');
+
+        // Transform Button Login
+        if (transformBtn) {
+            transformBtn.setAttribute('title', 'Copy LaTeX Code');
+            transformBtn.addEventListener('click', () => {
+                // TODO
+                console.log("[TODO] Transform the Typst Code to LaTeX Code.");
+            })
+        }
 
         // Like Button Logic
         if (likeBtn) {
+            likeBtn.setAttribute('title', 'Save to favorites (Ctrl+L)');
             likeBtn.addEventListener('click', function() {
                 console.log('Like button clicked');
                 this.style.transform = 'scale(1.2)';
                 setTimeout(() => { this.style.transform = ''; }, 200);
             });
-            likeBtn.setAttribute('title', 'Save to favorites (Ctrl+L)');
         }
 
         // Clear Button Logic
         if (clearBtn) {
-            clearBtn.addEventListener('click', () => this.handleClear());
             clearBtn.setAttribute('title', 'Clear editor (Ctrl+K)');
+            clearBtn.addEventListener('click', () => this.handleClear());
+        }
+
+        // Copy Button Logic
+        if (copyBtn) {
+            copyBtn.setAttribute('title', 'Copy Typst Code (Ctrl+C)');
+            copyBtn.addEventListener('click', () => {
+                const code = CodeMirrorAPI.getValue();
+
+                // blank
+                if (!code) return;
+
+                // Use Clipboard API
+                navigator.clipboard.writeText(code).then(() => {
+                    console.log('Content copied to clipboard');
+                    
+                    // shock
+                    // copyBtn.style.transform = 'scale(1.1)';
+                    // setTimeout(() => { copyBtn.style.transform = ''; }, 200);
+                    
+                    // Show Copy Successfully
+                    const originalTitle = copyBtn.getAttribute('title');
+                    copyBtn.setAttribute('title', 'Copied!');
+                    setTimeout(() => copyBtn.setAttribute('title', originalTitle), 1500);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            })
         }
 
         // Keyboard Shortcuts
