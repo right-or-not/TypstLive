@@ -92,12 +92,12 @@
 
 /* 3. Floating Open Button */
 .toolbox-open-btn {
-    position: absolute;
-    top: 20px;
+    position: fixed;
+    top: 90px;
     left: 20px;
     z-index: 20;
     background: white;
-    border: 1px solid #d0d7de;
+    border: 2px solid rgba(0, 0, 0, 0.3);
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     border-radius: 6px;
     width: 36px;
@@ -111,8 +111,8 @@
 }
 
 .toolbox-open-btn:hover {
-    color: #0969da;
-    border-color: #0969da;
+    color: #239DAD;
+    border: 2px, solid, #239DAD;
 }
 
 /* 4. Editor Section Wrapper */
@@ -373,8 +373,9 @@
     overflow: auto; /* Enable both horizontal and vertical scrolling */
     position: relative;
     margin: 10px 0;
-    padding: 30px 50px;
+    padding: 0;
     display: flex;
+    flex-direction: column;
 }
 
 /* Fix for SVG display - Remove flex centering that was hiding content */
@@ -388,11 +389,13 @@
     display: block;
     max-width: none;
     height: auto;
+    flex-shrink: 0;
+    margin: 30px;
 }
 
 #preview-area[data-environment="interline-formula"] img,
 #preview-area[data-environment="interline-formula"] svg {
-    margin: 0 auto;
+    margin: auto;
 }
 
 /* Placeholder text styling */
@@ -518,12 +521,29 @@
 
 /* --- Toolbox Content Grid --- */
 
+.toolbox-category-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 24px 16px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-left: 8px;
+    border-bottom: 2.5px solid rgba(35, 157, 173, 0.7); /* 左侧加个小蓝条装饰 */
+}
+
+/* 第一个标题不需要上边距 */
+.toolbox-category-title:first-child {
+    margin-top: 10px;
+}
+
 /* 1. Group Container (3 columns) */
 .toolbox-grid {
     display: flex;
     flex-wrap: wrap;
-    padding: 10px;
+    padding: 0 20px;
     gap: 10px;
+    margin-bottom: 10px;
 }
 
 /* 2. Group Item (The button to click) */
@@ -543,15 +563,15 @@
 }
 
 .toolbox-group-item:hover {
-    border-color: #0969da;
     background-color: #f6f8fa;
+    border: 2px solid #239DAD;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 .toolbox-group-item.active {
-    background-color: #e6f2ff; /* 激活时的背景色 */
-    border-color: #0969da;
+    background-color: #e6f2ff;
+    border: 2px solid #239DAD;
 }
 
 .toolbox-group-icon {

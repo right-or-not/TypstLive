@@ -167,31 +167,41 @@ const ToolboxController = {
     renderGroups() {
         if (!this.elements.content) return;
 
-        // Create Group Grid div
-        const grid = document.createElement('div');
-        grid.className = 'toolbox-grid';
+        // Clear div
         this.elements.content.innerHTML = '';
-        this.elements.content.appendChild(grid);
 
         // Create Group button
-        TOOLBOX_DATA.forEach((group, index) => {
-            const groupBtn = document.createElement('div');
-            groupBtn.className = 'toolbox-group-item';
-            groupBtn.dataset.id = group.id;
-            groupBtn.dataset.index = index;
+        TOOLBOX_DATA.forEach((categoryData) => {
+            // Render Category Title div
+            const title = document.createElement('div');
+            title.className = "toolbox-category-title";
+            title.textContent = categoryData.category;
+            this.elements.content.appendChild(title);
 
-            groupBtn.innerHTML = `
-                <div class="toolbox-group-icon">${group.icon}</div>
-                <div class="toolbox-group-name">${group.name}</div>
-            `;
+            // Create Group Grid div
+            const grid = document.createElement('div');
+            grid.className = 'toolbox-grid';
+            this.elements.content.appendChild(grid);
 
-            // add Click Listener
-            groupBtn.addEventListener('click', (e) => {
-                // taggle this Group
-                this.toggleGroup(group, index, grid);
+            categoryData.groups.forEach((group, index) => {
+                const groupBtn = document.createElement('div');
+                groupBtn.className = 'toolbox-group-item';
+                groupBtn.dataset.id = group.id;
+                groupBtn.dataset.index = index;
+
+                groupBtn.innerHTML = `
+                    <div class="toolbox-group-icon">${group.icon}</div>
+                    <div class="toolbox-group-name">${group.name}</div>
+                `;
+
+                // add Click Listener
+                groupBtn.addEventListener('click', (e) => {
+                    // taggle this Group
+                    this.toggleGroup(group, index, grid);
+                })
+
+                grid.appendChild(groupBtn);
             })
-
-            grid.appendChild(groupBtn);
         })
     },
 

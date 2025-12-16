@@ -11,7 +11,7 @@ from app import socketio
 
 # Prelude Code
 TYPST_PRELUDE = """
-#set page(width: auto, height: auto, margin: 5pt)
+#set page(width: auto, height: auto, margin: 20pt)
 #set text(font: ("Linux Libertine", "Source Han Serif SC"), size: 24pt)
 """
 

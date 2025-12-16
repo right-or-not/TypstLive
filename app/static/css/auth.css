@@ -203,6 +203,7 @@ body {
     align-items: center;
     justify-content: center;
     animation: slideIn 1s ease-out, fadeOut 3s ease-out 5s forwards;
+    text-align: center;
 }
 
 .alert-success {
