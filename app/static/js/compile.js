@@ -1,5 +1,5 @@
 // static/js/compile.js
-import { CodeMirrorAPI } from './syntax-highlight.js';
+import { CodeMirrorAPI } from './code-mirror.js';
 import { EditorAPI } from './editor.js';
 
 // Configuration

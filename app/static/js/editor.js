@@ -1,6 +1,6 @@
 // static/js/editor.js
 
-import { CodeMirrorAPI } from './syntax-highlight.js';
+import { CodeMirrorAPI } from './code-mirror.js';
 
 /**
  * =================================================================

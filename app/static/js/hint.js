@@ -2,7 +2,7 @@
 // To Complete Autocomplete Function
 
 // Import TYPST_KEYWORDS
-import { TYPST_KEYWORDS } from "./TypstKeywords.js";
+import { TYPST_KEYWORDS } from "./TYPST_KEYWORDS.js";
 
 /**
  * Register Typst Code Hint
