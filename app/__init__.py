@@ -31,7 +31,10 @@ def create_app(config_mode=Config):
     socketio.init_app(
         app,
         async_mode=app.config.get('SOCKETIO_ASYNC_MODE'),
-        cors_allowed_origins="*"
+        cors_allowed_origins="*",
+        http_compression=False,
+        ping_timeout=10,
+        ping_interval=5
     )
     
     # login config
