@@ -31,7 +31,7 @@ def login():
             flash("Login Successfully!", "success")
             return redirect(url_for("main.editor"))
         else:
-            flash("Your Email or Password is ERROR, Please Try Again!", "danger")
+            flash("Your Email or Password is ERROR, \nPlease Try Again!", "danger")
             return render_template("auth/login.html")
         
     return render_template("auth/login.html")
