@@ -584,7 +584,7 @@
     /* (100% - gap * 2) / 3 */
     width: calc((100% - 20px) / 3); 
     aspect-ratio: 1 / 1; /* 正方形 */
-    background: #ffffff;
+    background: white;
     border: 2px solid rgba(35, 157, 173, 0.7);
     border-radius: 8px;
     display: flex;
@@ -596,16 +596,32 @@
 }
 
 .toolbox-group-item:hover {
-    background-color: #f6f8fa;
+    background-color: white;
     border: 2px solid #239DAD;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 .toolbox-group-item.active {
-    background-color: rgba(35, 157, 173, 0.3);
+    background-color: white;
     border: 2px solid #239DAD;
 }
+
+.toolbox-icon-img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.toolbox-group-icon
+.toolbox-icon-img {
+    height: 32px; /* 限制最大高度，防止太大 */
+    width: 32px;
+}
+
 
 .toolbox-group-icon {
     font-size: 24px;
@@ -665,7 +681,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #fff;
+    background: white;
     border: 1.5px solid rgba(35, 157, 173, 0.3);
     border-radius: 4px;
     padding: 6px 2px;
@@ -675,8 +691,14 @@
 
 .toolbox-tool-btn:hover {
     border: 1.5px solid rgba(35, 157, 173, 0.5);
-    background-color: rgba(35, 157, 173, 0.3);
+    background-color: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.toolbox-tool-btn
+.toolbox-icon-img {
+    height: 20px; /* 小图标的高度 */
+    margin-bottom: 2px;
 }
 
 .tool-display {

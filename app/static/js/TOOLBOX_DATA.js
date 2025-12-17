@@ -8,8 +8,9 @@ export const TOOLBOX_DATA = [
                 id: "greek_lower",
                 name: "Greek (Lower)",
                 icon: "α", 
+                path: "/static/images/icons/greek.png",
                 items: [
-                    { display: "α", code: "alpha" }, 
+                    { path: "/static/images/icons/alpha.png", display: "α", code: "alpha" }, 
                     { display: "β", code: "beta" }
                 ]
             },
@@ -43,7 +44,7 @@ export const TOOLBOX_DATA = [
                 icon: "=", 
                 items: [
                     { display: "=", code: "eq" }, 
-                    { display: "≠", code: "neq" }
+                    { display: "≠", code: "eq.not" }
                 ]
             }
         ]

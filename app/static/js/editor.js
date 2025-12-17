@@ -1,7 +1,7 @@
 // static/js/editor.js
 
 import { CodeMirrorAPI } from './code-mirror.js';
-import { TOOLBOX_DATA } from './TOOLBOX_DATA.js';
+import { TOOLBOX_DATA } from './TOOLBOX_DATA_SOURCE.js';
 
 /**
  * =================================================================
@@ -162,6 +162,30 @@ const ToolboxController = {
     },
 
     /**
+     * Render Icon Content
+     */
+    renderIconContent(path, text, cssClass) {
+        const fallbackIcon = `
+            <svg class="${cssClass}" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+        `;
+
+        if (path && path.trim() != '') {
+            return `<img src="${path}" class="${cssClass}" alt="${text || 'icon'}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                    <span style="display:none; font-size: 1.2em;">${text || fallbackIcon}</span>`;
+        }
+
+        if (text && text.trim() != '') {
+            return text;
+        }
+
+        return fallbackIcon;
+    },
+
+    /**
      * Render Group
      */
     renderGroups() {
@@ -189,8 +213,10 @@ const ToolboxController = {
                 groupBtn.dataset.id = group.id;
                 groupBtn.dataset.index = index;
 
+                const iconHtml = this.renderIconContent(group.path, group.icon, 'toolbox-icon-img');
+
                 groupBtn.innerHTML = `
-                    <div class="toolbox-group-icon">${group.icon}</div>
+                    <div class="toolbox-group-icon">${iconHtml}</div>
                     <div class="toolbox-group-name">${group.name}</div>
                 `;
 
@@ -282,8 +308,9 @@ const ToolboxController = {
             const btn = document.createElement('div');
             btn.className = 'toolbox-tool-btn';
             btn.title = item.desc || item.code;
+            const displayHtml = this.renderIconContent(item.path, item.display, 'toolbox-icon-img');
             btn.innerHTML = `
-                <div class="tool-display">${item.display}</div>
+                <div class="tool-display">${displayHtml}</div>
                 <div class="tool-code">${item.code}</div>
             `;
 

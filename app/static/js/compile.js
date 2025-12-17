@@ -40,10 +40,11 @@ function initSocket() {
 
     // connect Socket.IO server
     socket = window.io({
-        transports: ['websocket', 'polling'],
+        transports: ['websocket'],
         reconnection: true,
         reconnectionDelay: 1000,
-        reconnectionAttempts: 5
+        reconnectionAttempts: 5,
+        upgrade: false
     });
     
     // --- Event Handlers ---
@@ -81,6 +82,15 @@ function initSocket() {
     socket.on('connect_error', function(error) {
         console.error('[Socket.IO] Connect error:', error);
         if (errorArea) errorArea.textContent = 'Connection Error';
+        if (error.message) {
+            console.error('Error Message:', error.message);
+        }
+        if (error.description) {
+            console.error('Server Response:', error.description);
+        }
+        if (error.type) {
+            console.error('Error Type:', error.type);
+    }
     });
     
     // 5. Disconnect
