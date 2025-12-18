@@ -33,8 +33,8 @@ def create_app(config_mode=Config):
         async_mode=app.config.get('SOCKETIO_ASYNC_MODE'),
         cors_allowed_origins="*",
         http_compression=False,
-        ping_timeout=10,
-        ping_interval=5
+        ping_timeout=60,
+        ping_interval=25
     )
     
     # login config

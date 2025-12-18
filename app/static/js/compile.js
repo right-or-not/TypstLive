@@ -41,10 +41,12 @@ function initSocket() {
     // connect Socket.IO server
     socket = window.io({
         transports: ['websocket'],
+        upgrade: false,
+        timeout: 60000,
         reconnection: true,
+        reconnectionAttempts: 10,
         reconnectionDelay: 1000,
-        reconnectionAttempts: 5,
-        upgrade: false
+        reconnectionDelayMax: 5000,
     });
     
     // --- Event Handlers ---
