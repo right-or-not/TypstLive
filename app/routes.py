@@ -1,6 +1,7 @@
 import os
-import uuid
-from flask import Blueprint, render_template, request, jsonify, send_file, flash, redirect, url_for, current_app
+import tempfile
+import subprocess
+from flask import Blueprint, render_template, request, jsonify, send_file, flash, redirect, url_for, current_app, Response
 from flask_login import login_required, current_user
 from datetime import datetime, timezone
 from app import db
@@ -104,45 +105,119 @@ def profile():
 @login_required
 def history():
     """ Compilation History """
+    history_items = CompilationHistory.query.filter_by(user_id=current_user.id).order_by(CompilationHistory.created_at.desc()).all()
+    return render_template("user/history.html", history_items=history_items)
+
+
+@main.route("/api/like", methods=["POST"])
+@login_required
+def add_history():
+    """ Save current code to history """
+    try:
+        data = request.get_json()
+        code = data.get('code')
+        env = data.get('env')
+        if not code or not env:
+            return jsonify({"status": "error", "message": "No code or environment provided.", "category": "danger"}), 400
+        # create new history
+        new_history = CompilationHistory(
+            user_id=current_user.id,
+            typst_code=code,
+            current_environment=env
+        )
+        # commit the changes
+        db.session.add(new_history)
+        db.session.commit()
+        return jsonify({"status": "success", "message": "Saved to My Favorites!", "category": "success"})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"status": "error", "message": str(e), "category": "danger"}), 500
     
-    return render_template("user/history.html")
-
-
-
-
-@main.route("/api/compile", methods=["POST"])
-@login_required
-def compile_typst():
-    """ Compile Typst """
-    pass
-
-
-
-
-@main.route("/api/history/<int:history_id>")
-@login_required
-def get_history(history_id):
-    """ Get History """
-    pass
-
-
-
-
 
 @main.route("/api/history/<int:history_id>/delete", methods=["DELETE"])
 @login_required
 def delete_history(history_id):
-    """ Delete History """ 
-    pass
+    """ Delete History Item """
+    try:
+        item = CompilationHistory.query.get_or_404(history_id)
+        # check the user id
+        if item.user_id != current_user.id:
+            return jsonify({"status": "error", "message": "Unauthorized"}), 403
+        # commit the delete
+        db.session.delete(item)
+        db.session.commit()
+        return jsonify({"status": "success", "message": "Removed from favorites."})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 
-
-@main.route("/download/<int:history_id>")
+@main.route("/history/image/<int:history_id>")
 @login_required
-def download_image(history_id):
-    """ Download Figure """
-    pass
+def compile_typst_history(history_id):
+    """ Compile Typst """
+    item = CompilationHistory.query.get_or_404(history_id)
+    
+    # check user id
+    if item.user_id != current_user.id:
+        return "Unauthorized", 403
+
+    preamble = """
+#set page(width: auto, height: auto, margin: 10pt)
+#set text(size: 14pt)
+"""
+    full_code = ""
+    
+    if item.current_environment == 'passage':
+        full_code = f"{preamble}\n{item.typst_code}"
+    elif item.current_environment == 'inline-formula':
+        # 行内公式，两边加 $
+        full_code = f"{preamble}\n$ {item.typst_code} $"
+    elif item.current_environment == 'interline-formula':
+        # 行间公式，两边加 $，通常 Typst 会自动居中内容，
+        # 但我们这里的居中主要靠前端 CSS 控制 SVG 在容器中的位置
+        full_code = f"{preamble}\n$ {item.typst_code} $"
+    else:
+        full_code = f"{preamble}\n{item.typst_code}"
+
+    try:
+        # 2. 创建临时文件进行编译
+        with tempfile.NamedTemporaryFile(suffix=".typ", delete=False) as f_typ:
+            f_typ.write(full_code.encode('utf-8'))
+            typ_path = f_typ.name
+            
+        svg_path = typ_path.replace(".typ", ".svg")
+        
+        # 3. 调用 Typst CLI 编译 (确保服务器已安装 typst 命令行工具)
+        # --root . 确保能引用其他文件(如果有)
+        process = subprocess.run(
+            ["typst", "compile", typ_path, svg_path],
+            capture_output=True,
+            text=True
+        )
+        
+        if process.returncode != 0:
+            # 编译失败，返回错误 SVG 或 400
+            print(f"Compilation Error: {process.stderr}")
+            return Response('<svg height="30" width="200"><text x="0" y="15" fill="red">Error</text></svg>', mimetype='image/svg+xml')
+
+        # 4. 返回生成的 SVG 文件
+        return send_file(svg_path, mimetype='image/svg+xml')
+
+    except Exception as e:
+        print(f"Render Error: {e}")
+        return Response('<svg height="30" width="200"><text x="0" y="15" fill="red">Server Error</text></svg>', mimetype='image/svg+xml')
+    finally:
+        # 清理临时文件 (可选，Linux下 /tmp 通常会自动清理，但最好手动处理)
+        try:
+            if 'typ_path' in locals() and os.path.exists(typ_path):
+                os.remove(typ_path)
+            if 'svg_path' in locals() and os.path.exists(svg_path):
+                os.remove(svg_path)
+        except:
+            pass
+
 
 
 

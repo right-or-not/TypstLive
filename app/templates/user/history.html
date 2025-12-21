@@ -6,5 +6,71 @@
 
 {% block user_content %}
 <h2 class="page-title">My Favorites</h2>
-<p style="color: #666;">Collection history will be displayed here.</p>
+
+{% if history_items %}
+    <div class="history-list">
+        {% for item in history_items %}
+        <div class="history-card" id="history-item-{{ item.id }}">
+            <div class="card-header">
+                <span class="env-badge {{ item.current_environment }}">
+                    {{ item.current_environment.replace('-', ' ') | title }}
+                </span>
+                <span class="timestamp">{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+            </div>
+
+            <div class="card-body">
+                <div class="code-preview">
+                    <pre><code>{{ item.typst_code }}</code></pre>
+                </div>
+
+                <div class="svg-container">
+                    <div class="svg-placeholder">
+                        <span>SVG Preview Area</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button class="btn-unlike" onclick="deleteHistoryItem({{ item.id }})" title="Remove from favorites">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#ff4d4f" stroke="#ff4d4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span>Saved</span>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <p>No favorites yet. Go to editor and click the heart button!</p>
+        <a href="{{ url_for('main.editor') }}" class="btn-save" style="text-decoration: none; display: inline-block; margin-top: 10px;">Go to Editor</a>
+    </div>
+{% endif %}
+
+<script>
+async function deleteHistoryItem(id) {
+    if (!confirm("Remove this item from your favorites?")) return;
+
+    try {
+        const response = await fetch(`/api/history/${id}/delete`, {
+            method: 'DELETE'
+        });
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            // Remove the card from DOM with animation
+            const card = document.getElementById(`history-item-${id}`);
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.9)';
+            setTimeout(() => card.remove(), 300);
+        } else {
+            alert("Failed to delete: " + data.message);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Network error.");
+    }
+}
+</script>
 {% endblock %}

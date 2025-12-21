@@ -414,10 +414,26 @@ export const ActionController = {
         // Like Button Logic
         if (likeBtn) {
             likeBtn.setAttribute('title', 'Save to favorites (Ctrl+L)');
-            likeBtn.addEventListener('click', function() {
+            likeBtn.addEventListener('click', async function() {
+                const code = CodeMirrorAPI.getValue();
+                const env = EnvironmentController.current;
                 this.style.transform = 'scale(1.2)';
                 setTimeout(() => { this.style.transform = ''; }, 200);
-                showFlash("Added to Favorites Successfully!", "success");
+                try {
+                    const response = await fetch('/api/like', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            code: code,
+                            env: env
+                        })
+                    });
+                    const data = await response.json();
+                    showFlash(data.message, data.category);
+                } catch (error) {
+                    console.log("Error: ", error);
+                    showFlash("Network Error: Cannot Connect to Server!", "danger");
+                }
             });
         }
 

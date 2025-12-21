@@ -55,27 +55,12 @@ class CompilationHistory(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
     typst_code = db.Column(db.Text, nullable=False)
     current_environment = db.Column(db.String(32), nullable=False)
-    output_format = db.Column(db.String(8), default='svg')
+    output_format = db.Column(db.String(8), default='')
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), index=True)
-    
-    """ get url of image """
-    '''def get_image_url(self):
-        if not self.image_path:
-            return ""
-        
-        # normalize path
-        normalized_path = self.image_path.replace('\\', '/')
-        if 'static/images/outputs' in normalized_path:
-            filename = os.path.basename(normalized_path)
-            return f"/static/images/outputs/{filename}"
-        else:
-            filename = os.path.basename(normalized_path)
-            return f"/static/images/outputs/{filename}"'''
-        
     
     def __repr__(self):
         # return super().__repr__()
-        return f"<CompilationHistory {self.id}>"
+        return f"<CompilationHistory {self.id} | Env: {self.current_environment}>"
 
 
 @login_manager.user_loader
