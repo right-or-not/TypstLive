@@ -54,12 +54,12 @@ class CompilationHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
     typst_code = db.Column(db.Text, nullable=False)
-    image_path = db.Column(db.String(255), nullable=False)
-    output_format = db.Column(db.String(10), default='png')
+    current_environment = db.Column(db.String(32), nullable=False)
+    output_format = db.Column(db.String(8), default='svg')
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), index=True)
     
     """ get url of image """
-    def get_image_url(self):
+    '''def get_image_url(self):
         if not self.image_path:
             return ""
         
@@ -70,7 +70,7 @@ class CompilationHistory(db.Model):
             return f"/static/images/outputs/{filename}"
         else:
             filename = os.path.basename(normalized_path)
-            return f"/static/images/outputs/{filename}"
+            return f"/static/images/outputs/{filename}"'''
         
     
     def __repr__(self):

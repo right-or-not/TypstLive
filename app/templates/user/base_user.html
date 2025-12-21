@@ -1,0 +1,44 @@
+<!-- <h1>templates/user/base.html</h1> -->
+
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+{% endblock %}
+
+{% block extra_nav %}
+    <a href="{{ url_for('main.editor') }}" class="nav-btn" title="Back to Editor">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+    </a>
+{% endblock %}
+
+{% block content %}
+<div class="user-container">
+    <aside class="user-sidebar">
+        <ul class="sidebar-menu">
+            <li class="sidebar-item">
+                <a href="{{ url_for('main.info') }}" class="sidebar-link {% if request.endpoint == 'main.info' %}active{% endif %}">
+                    Personal Info
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="{{ url_for('main.profile') }}" class="sidebar-link {% if request.endpoint == 'main.profile' %}active{% endif %}">
+                    Edit Profile
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="{{ url_for('main.history') }}" class="sidebar-link {% if request.endpoint == 'main.history' %}active{% endif %}">
+                    My Favorites
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <div class="user-main">
+        {% block user_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

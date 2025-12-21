@@ -27,7 +27,8 @@
             
             <!-- Right: Navigation Buttons -->
             <nav class="header-nav">
-                <a href="{{ url_for('main.history') }}" class="nav-btn" title="Compile History">
+                {% block extra_nav %}{% endblock %}
+                <a href="{{ url_for('main.history') }}" class="nav-btn" title="History of Favorites">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
@@ -48,7 +49,7 @@
                         </svg>
                     </button>
                 </form>
-                <a href="{{ url_for('main.profile') }}" class="nav-avatar-link" title="My Profile">
+                <a href="{{ url_for('main.info') }}" class="nav-avatar-link" title="My Profile">
                     <img src="{{ current_user.get_avatar_url() }}" alt="{{ current_user.username }}" class="nav-avatar">
                 </a>
             </nav>
@@ -60,6 +61,15 @@
     <main class="main-content">
         {% block content %}{% endblock %}
     </main>
+    <!-- Flash info -->
+    <div class="flash-message" id="flash-message">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% set category, message = messages[-1] %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endif %}
+        {% endwith %}
+    </div>
     <div class="blank" style="padding-bottom: 55px; margin: 0;"></div>
     
     <!-- Footer -->

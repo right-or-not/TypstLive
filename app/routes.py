@@ -1,6 +1,6 @@
 import os
 import uuid
-from flask import Blueprint, render_template, request, jsonify, send_file, flash, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, send_file, flash, redirect, url_for, current_app
 from flask_login import login_required, current_user
 from datetime import datetime, timezone
 from app import db
@@ -28,52 +28,75 @@ def editor():
     return render_template("editor.html")
 
 
+
+@main.route("/info")
+@login_required
+def info():
+    """ Display User Information """
+    return render_template("user/info.html")
+
+
 @main.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
     """ Edit Profile """
     
-    """
-    # POST: form
     if request.method == "POST":
-        # get form information
-        username = request.form.get("username")
-        email = request.form.get("email")
-        
-        # check: none
-        if not username or not email:
-            flash("Username and Email cannot be Empty!", "danger")
-            return render_template("profile.html")
-        
-        # check: username occupied
-        existing_user = User.query.filter(
-            User.username == username,
-            User.id != current_user.id
-        ).first()
-        if existing_user:
-            flash("Username Occupied!", "danger")
-            return render_template("profile.html")
-        
-        # check: email occupied
-        existing_email = User.query.filter(
-            User.email == email,
-            User.id != current_user.id
-        ).first()
-        if existing_email:
-            flash("Email Occupied!", "danger")
-            return render_template("profile.html")
-        
-        # update user info
-        current_user.username = username
-        current_user.email = email
-        current_user.update_at = datetime.now(timezone.utc)
-        
-        db.session.commit()
-        flash("Personal Information Updated Successfully!", "success")
-        return redirect(url_for("main.profile"))
-    """
+        try:
+            # get new info
+            gender = request.form.get("gender")
+            phone_number = request.form.get("phone_number")
+            birthday = request.form.get("birthday")
+            signature = request.form.get("signature")
+            bio = request.form.get("bio")
+            
+            # update new info
+            # gender
+            current_user.gender = gender
+            # phone_number
+            current_user.phone_number = phone_number if phone_number and phone_number.strip() else None
+            # birthday
+            if birthday:
+                try:
+                    current_user.birthday = datetime.strptime(birthday, '%Y-%m-%d').date()
+                except ValueError:
+                    flash("Invalid Date Format!", "warning")
+            else:
+                current_user.birthday = None
+            # signature
+            current_user.signature = signature if signature and signature.strip() else None
+            # bio
+            current_user.bio = bio if bio and bio.strip() else None
+            # avatar
+            if 'avatar' in request.files:
+                file = request.files['avatar']
+                if file and file.filename != '':
+                    try:
+                        filename = f"{current_user.id}.jpg"
+                        upload_folder = os.path.join(current_app.root_path, 'static', 'images', 'avatars')
+                        if not os.path.exists(upload_folder):
+                            os.makedirs(upload_folder)
+                        file_path = os.path.join(upload_folder, filename)
+                        file.save(file_path)
+                        current_user.avatar_path = f"static/images/avatars/{filename}"
+                        print(f'[Image Upload] Avatar save to: {file_path}')
+                    except Exception as e:
+                        print(f'[ERROR] Failed to save avatar: {e}')
+                        flash("Failed to upload avatat!", "danger")
+            # commit the changes
+            db.session.commit()
+            flash("Update Request Received!", "success")
+            return redirect(url_for("main.profile"))
+        except Exception as e:
+            db.session.rollback()
+            print(f'[Database Error] {e}')
+            if "UNIQUE constraint failed" in str(e) or "Duplicate entry" in str(e):
+                flash("Update Failed: Phone number might already be in use.", "danger")
+            else:
+                flash(f"Update Failed: {str(e)}", "danger")
+            return redirect(url_for("main.profile"))
     
-    return render_template("profile.html")
+    return render_template("user/profile.html")
 
 
 
@@ -82,7 +105,7 @@ def profile():
 def history():
     """ Compilation History """
     
-    return render_template("history.html")
+    return render_template("user/history.html")
 
 
 
