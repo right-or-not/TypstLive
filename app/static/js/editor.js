@@ -143,6 +143,7 @@ const ITEMS_PER_ROW = 3;
 const ToolboxController = {
     elements: {},
     activeGroupId: null,
+    isInitialized: false,
 
     init() {
         this.elements = {
@@ -156,9 +157,6 @@ const ToolboxController = {
             this.elements.closeBtn.addEventListener('click', () => this.close());
         if (this.elements.openBtn) 
             this.elements.openBtn.addEventListener('click', () => this.open());
-
-        // Render Group List
-        this.renderGroups();
     },
 
     /**
@@ -174,7 +172,7 @@ const ToolboxController = {
         `;
 
         if (path && path.trim() != '') {
-            return `<img src="${path}" class="${cssClass}" alt="${text || 'icon'}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            return `<img src="${path}" class="${cssClass}" alt="${text || 'icon'}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
                     <span style="display:none; font-size: 1.2em;">${text || fallbackIcon}</span>`;
         }
 
@@ -295,11 +293,11 @@ const ToolboxController = {
         });
 
         // select style according to maxCodeLength
-        if (maxCodeLength <= 5) 
+        if (maxCodeLength <= 4) 
             panel.classList.add('panel-cols-six');
-        else if (maxCodeLength <= 18)
+        else if (maxCodeLength <= 8)
             panel.classList.add('panel-cols-four');
-        else if (maxCodeLength <= 28)
+        else if (maxCodeLength <= 24)
             panel.classList.add('panel-cols-three');
         else
             panel.classList.add('panel-cols-two');
@@ -347,6 +345,11 @@ const ToolboxController = {
     },
 
     open() {
+        if (!this.isInitialized) {
+            console.log("[Toolbox] Lazy loading content...");
+            this.renderGroups();
+            this.isInitialized = true;
+        }
         this.elements.openBtn.style.display = 'none';
         this.elements.wrapper.classList.remove('toolbox-closed');
         this.triggerResize();

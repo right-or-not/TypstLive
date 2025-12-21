@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
     birthday = db.Column(db.Date, nullable=True)
     bio = db.Column(db.Text, nullable=True)
     signature = db.Column(db.String(255), nullable=True)
-    avatar_path = db.Column(db.String(255), default='static/images/avatars/default.png')
+    avatar_path = db.Column(db.String(255), nullable=True)
     # time stamp
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
@@ -36,7 +36,7 @@ class User(UserMixin, db.Model):
             if self.avatar_path.startswith("static/images/avatars"):
                 return f"/{self.avatar_path}"
             return f"/static/images/avatars/{self.avatar_path}"
-        return "/static/images/avatars/default/avator-female.png" if self.gender == "Female" else "/static/images/avatars/default/avator-male.png"
+        return "/static/images/avatars/default/avatar-male.png" if self.gender == "Female" else "/static/images/avatars/default/avatar-male.png"
     
     def __repr__(self):
         # return super().__repr__()

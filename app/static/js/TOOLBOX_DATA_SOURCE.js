@@ -40,10 +40,10 @@ export const TOOLBOX_DATA = [
                         "move": 0
                     },
                     {
-                        "code": "hbar",
+                        "code": "bar.h",
                         "display": "",
-                        "path": null,
-                        "desc": "hbar",
+                        "path": "/static/images/icons/item_Common_bar_h_f08f.png",
+                        "desc": "bar.h",
                         "move": 0
                     },
                     {
@@ -54,10 +54,10 @@ export const TOOLBOX_DATA = [
                         "move": 0
                     },
                     {
-                        "code": "re",
+                        "code": "refmark",
                         "display": "",
-                        "path": null,
-                        "desc": "re",
+                        "path": "/static/images/icons/item_Common_refmark_0617.png",
+                        "desc": "refmark",
                         "move": 0
                     },
                     {
@@ -66,6 +66,431 @@ export const TOOLBOX_DATA = [
                         "path": "/static/images/icons/item_Common_aleph_04f0.png",
                         "desc": "aleph",
                         "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Greek",
+                "name": "Greek",
+                "path": "/static/images/icons/group_Greek_0aaf.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "alpha",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_alpha_d6af.png",
+                        "desc": "alpha",
+                        "move": 0
+                    },
+                    {
+                        "code": "beta",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_beta_4549.png",
+                        "desc": "beta",
+                        "move": 0
+                    },
+                    {
+                        "code": "gamma",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_gamma_08f2.png",
+                        "desc": "gamma",
+                        "move": 0
+                    },
+                    {
+                        "code": "delta",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_delta_f177.png",
+                        "desc": "delta",
+                        "move": 0
+                    },
+                    {
+                        "code": "epsilon",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_epsilon_5286.png",
+                        "desc": "epsilon",
+                        "move": 0
+                    },
+                    {
+                        "code": "zeta",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_zeta_c547.png",
+                        "desc": "zeta",
+                        "move": 0
+                    },
+                    {
+                        "code": "eta",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_eta_c514.png",
+                        "desc": "eta",
+                        "move": 0
+                    },
+                    {
+                        "code": "theta",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_theta_d184.png",
+                        "desc": "theta",
+                        "move": 0
+                    },
+                    {
+                        "code": "iota",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_iota_5301.png",
+                        "desc": "iota",
+                        "move": 0
+                    },
+                    {
+                        "code": "kappa",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_kappa_fa07.png",
+                        "desc": "kappa",
+                        "move": 0
+                    },
+                    {
+                        "code": "lambda",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_lambda_b524.png",
+                        "desc": "lambda",
+                        "move": 0
+                    },
+                    {
+                        "code": "mu",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_mu_d048.png",
+                        "desc": "mu",
+                        "move": 0
+                    },
+                    {
+                        "code": "nu",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_nu_47f3.png",
+                        "desc": "nu",
+                        "move": 0
+                    },
+                    {
+                        "code": "xi",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_xi_1f5a.png",
+                        "desc": "xi",
+                        "move": 0
+                    },
+                    {
+                        "code": "omicron",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_omicron_7876.png",
+                        "desc": "omicron",
+                        "move": 0
+                    },
+                    {
+                        "code": "pi",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_pi_91e4.png",
+                        "desc": "pi",
+                        "move": 0
+                    },
+                    {
+                        "code": "rho",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_rho_b48e.png",
+                        "desc": "rho",
+                        "move": 0
+                    },
+                    {
+                        "code": "sigma",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_sigma_e0b6.png",
+                        "desc": "sigma",
+                        "move": 0
+                    },
+                    {
+                        "code": "tau",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_tau_e540.png",
+                        "desc": "tau",
+                        "move": 0
+                    },
+                    {
+                        "code": "upsilon",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_upsilon_bbe6.png",
+                        "desc": "upsilon",
+                        "move": 0
+                    },
+                    {
+                        "code": "phi",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_phi_370a.png",
+                        "desc": "phi",
+                        "move": 0
+                    },
+                    {
+                        "code": "chi",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_chi_5467.png",
+                        "desc": "chi",
+                        "move": 0
+                    },
+                    {
+                        "code": "psi",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_psi_83b4.png",
+                        "desc": "psi",
+                        "move": 0
+                    },
+                    {
+                        "code": "omega",
+                        "display": "",
+                        "path": "/static/images/icons/item_Greek_omega_92e1.png",
+                        "desc": "omega",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "GREEK",
+                "name": "GREEK",
+                "path": "/static/images/icons/group_GREEK_d4ca.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "Gamma",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Gamma_f195.png",
+                        "desc": "Gamma",
+                        "move": 0
+                    },
+                    {
+                        "code": "Delta",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Delta_1a8f.png",
+                        "desc": "Delta",
+                        "move": 0
+                    },
+                    {
+                        "code": "Theta",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Theta_943b.png",
+                        "desc": "Theta",
+                        "move": 0
+                    },
+                    {
+                        "code": "Lambda",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Lambda_1588.png",
+                        "desc": "Lambda",
+                        "move": 0
+                    },
+                    {
+                        "code": "Xi",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Xi_3ef6.png",
+                        "desc": "Xi",
+                        "move": 0
+                    },
+                    {
+                        "code": "Pi",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Pi_03f7.png",
+                        "desc": "Pi",
+                        "move": 0
+                    },
+                    {
+                        "code": "Sigma",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Sigma_2b82.png",
+                        "desc": "Sigma",
+                        "move": 0
+                    },
+                    {
+                        "code": "Upsilon",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Upsilon_a08d.png",
+                        "desc": "Upsilon",
+                        "move": 0
+                    },
+                    {
+                        "code": "Phi",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Phi_58bc.png",
+                        "desc": "Phi",
+                        "move": 0
+                    },
+                    {
+                        "code": "Psi",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Psi_cc8d.png",
+                        "desc": "Psi",
+                        "move": 0
+                    },
+                    {
+                        "code": "Omega",
+                        "display": "",
+                        "path": "/static/images/icons/item_GREEK_Omega_5561.png",
+                        "desc": "Omega",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Varient",
+                "name": "Varient",
+                "path": "/static/images/icons/group_Varient_31d0.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "epsilon.alt",
+                        "display": "",
+                        "path": "/static/images/icons/item_Varient_epsilon_alt_a306.png",
+                        "desc": "epsilon.alt",
+                        "move": 0
+                    },
+                    {
+                        "code": "epsilon.alt.rev",
+                        "display": "",
+                        "path": "/static/images/icons/item_Varient_epsilon_alt_rev_85e5.png",
+                        "desc": "epsilon.alt.rev",
+                        "move": 0
+                    },
+                    {
+                        "code": "theta.alt",
+                        "display": "",
+                        "path": "/static/images/icons/item_Varient_theta_alt_be6f.png",
+                        "desc": "theta.alt",
+                        "move": 0
+                    },
+                    {
+                        "code": "kappa.alt",
+                        "display": "",
+                        "path": "/static/images/icons/item_Varient_kappa_alt_febe.png",
+                        "desc": "kappa.alt",
+                        "move": 0
+                    },
+                    {
+                        "code": "pi.alt",
+                        "display": "",
+                        "path": "/static/images/icons/item_Varient_pi_alt_3944.png",
+                        "desc": "pi.alt",
+                        "move": 0
+                    },
+                    {
+                        "code": "rho.alt",
+                        "display": "",
+                        "path": "/static/images/icons/item_Varient_rho_alt_59de.png",
+                        "desc": "rho.alt",
+                        "move": 0
+                    },
+                    {
+                        "code": "sigma.alt",
+                        "display": "",
+                        "path": "/static/images/icons/item_Varient_sigma_alt_b134.png",
+                        "desc": "sigma.alt",
+                        "move": 0
+                    },
+                    {
+                        "code": "phi.alt",
+                        "display": "",
+                        "path": "/static/images/icons/item_Varient_phi_alt_09ed.png",
+                        "desc": "phi.alt",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Hebrew",
+                "name": "Hebrew",
+                "path": "/static/images/icons/group_Hebrew_c6c1.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "aleph",
+                        "display": "",
+                        "path": "/static/images/icons/item_Hebrew_aleph_c7c1.png",
+                        "desc": "aleph",
+                        "move": 0
+                    },
+                    {
+                        "code": "beth",
+                        "display": "",
+                        "path": "/static/images/icons/item_Hebrew_beth_e87f.png",
+                        "desc": "beth",
+                        "move": 0
+                    },
+                    {
+                        "code": "gimel",
+                        "display": "",
+                        "path": "/static/images/icons/item_Hebrew_gimel_e2cd.png",
+                        "desc": "gimel",
+                        "move": 0
+                    },
+                    {
+                        "code": "dalet",
+                        "display": "",
+                        "path": "/static/images/icons/item_Hebrew_dalet_4428.png",
+                        "desc": "dalet",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Fonts",
+                "name": "Fonts",
+                "path": "/static/images/icons/group_Fonts_59c4.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "bb()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Fonts_bb_fn_56d9.png",
+                        "desc": "bb()",
+                        "move": 2
+                    },
+                    {
+                        "code": "cal()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Fonts_cal_fn_9a3b.png",
+                        "desc": "cal()",
+                        "move": 2
+                    },
+                    {
+                        "code": "frak()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Fonts_frak_fn_ac83.png",
+                        "desc": "frak()",
+                        "move": 2
+                    },
+                    {
+                        "code": "scr()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Fonts_scr_fn_de39.png",
+                        "desc": "scr()",
+                        "move": 2
+                    },
+                    {
+                        "code": "sans()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Fonts_sans_fn_dde9.png",
+                        "desc": "sans()",
+                        "move": 2
+                    },
+                    {
+                        "code": "mono()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Fonts_mono_fn_0ecb.png",
+                        "desc": "mono()",
+                        "move": 2
+                    },
+                    {
+                        "code": "bold()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Fonts_bold_fn_64df.png",
+                        "desc": "bold()",
+                        "move": 2
+                    },
+                    {
+                        "code": "italic()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Fonts_italic_fn_420e.png",
+                        "desc": "italic()",
+                        "move": 2
                     }
                 ]
             }
@@ -77,7 +502,7 @@ export const TOOLBOX_DATA = [
             {
                 "id": "Operations",
                 "name": "Operations",
-                "path": null,
+                "path": "/static/images/icons/group_Operations_456d.png",
                 "icon": "",
                 "items": [
                     {
@@ -109,10 +534,10 @@ export const TOOLBOX_DATA = [
                         "move": 0
                     },
                     {
-                        "code": "cdot",
+                        "code": "dot",
                         "display": "",
-                        "path": null,
-                        "desc": "cdot",
+                        "path": "/static/images/icons/item_Operations_dot_7362.png",
+                        "desc": "dot",
                         "move": 0
                     },
                     {
@@ -127,6 +552,13 @@ export const TOOLBOX_DATA = [
                         "display": "",
                         "path": "/static/images/icons/item_Operations_ast_0f8e.png",
                         "desc": "ast",
+                        "move": 0
+                    },
+                    {
+                        "code": "ast.o",
+                        "display": "",
+                        "path": "/static/images/icons/item_Operations_ast_o_7ea8.png",
+                        "desc": "ast.o",
                         "move": 0
                     },
                     {
@@ -165,6 +597,524 @@ export const TOOLBOX_DATA = [
                         "move": 0
                     }
                 ]
+            },
+            {
+                "id": "Relations",
+                "name": "Relations",
+                "path": "/static/images/icons/group_Relations_e109.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "=",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_eq_a355.png",
+                        "desc": "=",
+                        "move": 0
+                    },
+                    {
+                        "code": "!=",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_neq_8e97.png",
+                        "desc": "!=",
+                        "move": 0
+                    },
+                    {
+                        "code": "<",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_lt_5c9a.png",
+                        "desc": "<",
+                        "move": 0
+                    },
+                    {
+                        "code": ">",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_gt_5d23.png",
+                        "desc": ">",
+                        "move": 0
+                    },
+                    {
+                        "code": "<=",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_le_a429.png",
+                        "desc": "<=",
+                        "move": 0
+                    },
+                    {
+                        "code": ">=",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_ge_edb1.png",
+                        "desc": ">=",
+                        "move": 0
+                    },
+                    {
+                        "code": "approx",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_approx_078f.png",
+                        "desc": "approx",
+                        "move": 0
+                    },
+                    {
+                        "code": "equiv",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_equiv_6144.png",
+                        "desc": "equiv",
+                        "move": 0
+                    },
+                    {
+                        "code": "prop",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_prop_ff1b.png",
+                        "desc": "prop",
+                        "move": 0
+                    },
+                    {
+                        "code": ":=",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_def_52a1.png",
+                        "desc": ":=",
+                        "move": 0
+                    },
+                    {
+                        "code": "prec",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_prec_7df7.png",
+                        "desc": "prec",
+                        "move": 0
+                    },
+                    {
+                        "code": "succ",
+                        "display": "",
+                        "path": "/static/images/icons/item_Relations_succ_0d05.png",
+                        "desc": "succ",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Logic",
+                "name": "Logic",
+                "path": "/static/images/icons/group_Logic_35ba.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "forall",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_forall_1d09.png",
+                        "desc": "forall",
+                        "move": 0
+                    },
+                    {
+                        "code": "exists",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_exists_3f13.png",
+                        "desc": "exists",
+                        "move": 0
+                    },
+                    {
+                        "code": "exists.not",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_exists_not_e767.png",
+                        "desc": "exists.not",
+                        "move": 0
+                    },
+                    {
+                        "code": "not",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_not_7689.png",
+                        "desc": "not",
+                        "move": 0
+                    },
+                    {
+                        "code": "and",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_and_0422.png",
+                        "desc": "and",
+                        "move": 0
+                    },
+                    {
+                        "code": "or",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_or_d1c5.png",
+                        "desc": "or",
+                        "move": 0
+                    },
+                    {
+                        "code": "xor",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_xor_2668.png",
+                        "desc": "xor",
+                        "move": 0
+                    },
+                    {
+                        "code": "=>",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_implies_eb86.png",
+                        "desc": "=>",
+                        "move": 0
+                    },
+                    {
+                        "code": "<=>",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_iff_186f.png",
+                        "desc": "<=>",
+                        "move": 0
+                    },
+                    {
+                        "code": "therefore",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_therefore_93b9.png",
+                        "desc": "therefore",
+                        "move": 0
+                    },
+                    {
+                        "code": "because",
+                        "display": "",
+                        "path": "/static/images/icons/item_Logic_because_fe51.png",
+                        "desc": "because",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Sets",
+                "name": "Sets",
+                "path": "/static/images/icons/group_Sets_86f5.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "in",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_in_f3ff.png",
+                        "desc": "in",
+                        "move": 0
+                    },
+                    {
+                        "code": "in.not",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_in_not_bd18.png",
+                        "desc": "in.not",
+                        "move": 0
+                    },
+                    {
+                        "code": "subset",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_subset_3c5d.png",
+                        "desc": "subset",
+                        "move": 0
+                    },
+                    {
+                        "code": "subset.eq",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_subseteq_82cb.png",
+                        "desc": "subset.eq",
+                        "move": 0
+                    },
+                    {
+                        "code": "union",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_union_f1a6.png",
+                        "desc": "union",
+                        "move": 0
+                    },
+                    {
+                        "code": "inter",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_inter_d8ee.png",
+                        "desc": "inter",
+                        "move": 0
+                    },
+                    {
+                        "code": "emptyset",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_emptyset_b673.png",
+                        "desc": "emptyset",
+                        "move": 0
+                    },
+                    {
+                        "code": "complement",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_complement_73d7.png",
+                        "desc": "complement",
+                        "move": 0
+                    },
+                    {
+                        "code": "bb(N)",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_NN_ca95.png",
+                        "desc": "bb(N)",
+                        "move": 0
+                    },
+                    {
+                        "code": "bb(Z)",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_ZZ_245f.png",
+                        "desc": "bb(Z)",
+                        "move": 0
+                    },
+                    {
+                        "code": "bb(Q)",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_QQ_d237.png",
+                        "desc": "bb(Q)",
+                        "move": 0
+                    },
+                    {
+                        "code": "bb(R)",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_RR_74f5.png",
+                        "desc": "bb(R)",
+                        "move": 0
+                    },
+                    {
+                        "code": "bb(C)",
+                        "display": "",
+                        "path": "/static/images/icons/item_Sets_CC_dc6f.png",
+                        "desc": "bb(C)",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Calculus",
+                "name": "Calculus",
+                "path": "/static/images/icons/group_Calculus_0349.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "sum",
+                        "display": "",
+                        "path": "/static/images/icons/item_Calculus_sum_120f.png",
+                        "desc": "sum",
+                        "move": 0
+                    },
+                    {
+                        "code": "product",
+                        "display": "",
+                        "path": "/static/images/icons/item_Calculus_product_8a2f.png",
+                        "desc": "product",
+                        "move": 0
+                    },
+                    {
+                        "code": "integral",
+                        "display": "",
+                        "path": "/static/images/icons/item_Calculus_integral_0f02.png",
+                        "desc": "integral",
+                        "move": 0
+                    },
+                    {
+                        "code": "integral.double",
+                        "display": "",
+                        "path": "/static/images/icons/item_Calculus_integral_d_741c.png",
+                        "desc": "integral.double",
+                        "move": 0
+                    },
+                    {
+                        "code": "integral.cont",
+                        "display": "",
+                        "path": "/static/images/icons/item_Calculus_integral_c_dacd.png",
+                        "desc": "integral.cont",
+                        "move": 0
+                    },
+                    {
+                        "code": "partial",
+                        "display": "",
+                        "path": "/static/images/icons/item_Calculus_partial_75c8.png",
+                        "desc": "partial",
+                        "move": 0
+                    },
+                    {
+                        "code": "nabla",
+                        "display": "",
+                        "path": "/static/images/icons/item_Calculus_nabla_2193.png",
+                        "desc": "nabla",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Arrows",
+                "name": "Arrows",
+                "path": "/static/images/icons/group_Arrows_4e05.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "->",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_arrow_r_eb6e.png",
+                        "desc": "->",
+                        "move": 0
+                    },
+                    {
+                        "code": "<-",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_arrow_l_1925.png",
+                        "desc": "<-",
+                        "move": 0
+                    },
+                    {
+                        "code": "<->",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_arrow_lr_09e5.png",
+                        "desc": "<->",
+                        "move": 0
+                    },
+                    {
+                        "code": "=>",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_arrow_R_6ed8.png",
+                        "desc": "=>",
+                        "move": 0
+                    },
+                    {
+                        "code": "<=",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_arrow_L_aa1d.png",
+                        "desc": "<=",
+                        "move": 0
+                    },
+                    {
+                        "code": "<=>",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_arrow_LR_c959.png",
+                        "desc": "<=>",
+                        "move": 0
+                    },
+                    {
+                        "code": "|->",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_mapsto_8a70.png",
+                        "desc": "|->",
+                        "move": 0
+                    },
+                    {
+                        "code": "~>",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_squiggly_d276.png",
+                        "desc": "~>",
+                        "move": 0
+                    },
+                    {
+                        "code": "arrow.hook",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_hook_r_bb9c.png",
+                        "desc": "arrow.hook",
+                        "move": 0
+                    },
+                    {
+                        "code": "-->",
+                        "display": "",
+                        "path": "/static/images/icons/item_Arrows_long_r_f6d2.png",
+                        "desc": "-->",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Geometry",
+                "name": "Geometry",
+                "path": "/static/images/icons/group_Geometry_d9c6.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "angle",
+                        "display": "",
+                        "path": "/static/images/icons/item_Geometry_angle_1eab.png",
+                        "desc": "angle",
+                        "move": 0
+                    },
+                    {
+                        "code": "perp",
+                        "display": "",
+                        "path": "/static/images/icons/item_Geometry_perp_b8d3.png",
+                        "desc": "perp",
+                        "move": 0
+                    },
+                    {
+                        "code": "parallel",
+                        "display": "",
+                        "path": "/static/images/icons/item_Geometry_parallel_6e8f.png",
+                        "desc": "parallel",
+                        "move": 0
+                    },
+                    {
+                        "code": "triangle",
+                        "display": "",
+                        "path": "/static/images/icons/item_Geometry_triangle_827d.png",
+                        "desc": "triangle",
+                        "move": 0
+                    },
+                    {
+                        "code": "square",
+                        "display": "",
+                        "path": "/static/images/icons/item_Geometry_square_8a72.png",
+                        "desc": "square",
+                        "move": 0
+                    },
+                    {
+                        "code": "circle",
+                        "display": "",
+                        "path": "/static/images/icons/item_Geometry_circle_a27e.png",
+                        "desc": "circle",
+                        "move": 0
+                    },
+                    {
+                        "code": "degree",
+                        "display": "",
+                        "path": "/static/images/icons/item_Geometry_degree_b47c.png",
+                        "desc": "degree",
+                        "move": 0
+                    }
+                ]
+            },
+            {
+                "id": "Symbols",
+                "name": "Symbols",
+                "path": "/static/images/icons/group_Symbols_5214.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "dots.h",
+                        "display": "",
+                        "path": "/static/images/icons/item_Symbols_dots_h_7a06.png",
+                        "desc": "dots.h",
+                        "move": 0
+                    },
+                    {
+                        "code": "dots.v",
+                        "display": "",
+                        "path": "/static/images/icons/item_Symbols_dots_v_8fa8.png",
+                        "desc": "dots.v",
+                        "move": 0
+                    },
+                    {
+                        "code": "dots.c",
+                        "display": "",
+                        "path": "/static/images/icons/item_Symbols_dots_c_16ad.png",
+                        "desc": "dots.c",
+                        "move": 0
+                    },
+                    {
+                        "code": "'",
+                        "display": "",
+                        "path": "/static/images/icons/item_Symbols_prime_53cc.png",
+                        "desc": "'",
+                        "move": 0
+                    },
+                    {
+                        "code": "caret",
+                        "display": "",
+                        "path": "/static/images/icons/item_Symbols_caret_f155.png",
+                        "desc": "caret",
+                        "move": 0
+                    },
+                    {
+                        "code": "dagger",
+                        "display": "",
+                        "path": "/static/images/icons/item_Symbols_dagger_2e37.png",
+                        "desc": "dagger",
+                        "move": 0
+                    }
+                ]
             }
         ]
     },
@@ -189,28 +1139,28 @@ export const TOOLBOX_DATA = [
                         "display": "",
                         "path": "/static/images/icons/item_Constructs_binom_a6bd.png",
                         "desc": "Binomial",
-                        "move": 1
+                        "move": 2
                     },
                     {
                         "code": "sqrt()",
                         "display": "",
                         "path": "/static/images/icons/item_Constructs_sqrt_82ec.png",
                         "desc": "Square Root",
-                        "move": 1
+                        "move": 2
                     },
                     {
                         "code": "root(n, x)",
                         "display": "",
                         "path": "/static/images/icons/item_Constructs_root_2a4f.png",
                         "desc": "Root",
-                        "move": 1
+                        "move": 5
                     },
                     {
-                        "code": "mat(;,)",
+                        "code": "mat(,;,)",
                         "display": "",
                         "path": "/static/images/icons/item_Constructs_mat_20f9.png",
                         "desc": "Matrix",
-                        "move": 4
+                        "move": 5
                     },
                     {
                         "code": "vec(,,)",
@@ -260,6 +1210,198 @@ export const TOOLBOX_DATA = [
                         "path": "/static/images/icons/item_Constructs_ceil_53d3.png",
                         "desc": "Ceiling",
                         "move": 1
+                    }
+                ]
+            },
+            {
+                "id": "Accents",
+                "name": "Accents",
+                "path": "/static/images/icons/group_Accents_0890.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "hat()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Accents_hat_7a7a.png",
+                        "desc": "hat()",
+                        "move": 1
+                    },
+                    {
+                        "code": "tilde()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Accents_tilde_f764.png",
+                        "desc": "tilde()",
+                        "move": 1
+                    },
+                    {
+                        "code": "bar()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Accents_bar_f14a.png",
+                        "desc": "bar()",
+                        "move": 1
+                    },
+                    {
+                        "code": "dot()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Accents_dot_78a9.png",
+                        "desc": "dot()",
+                        "move": 1
+                    },
+                    {
+                        "code": "dot.double()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Accents_ddot_b9f4.png",
+                        "desc": "dot.double()",
+                        "move": 1
+                    },
+                    {
+                        "code": "diaer()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Accents_diaer_8523.png",
+                        "desc": "diaer()",
+                        "move": 1
+                    },
+                    {
+                        "code": "breve()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Accents_breve_71df.png",
+                        "desc": "breve()",
+                        "move": 1
+                    },
+                    {
+                        "code": "circle()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Accents_circle_b052.png",
+                        "desc": "circle()",
+                        "move": 1
+                    },
+                    {
+                        "code": "arrow()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Accents_vec_acc_a0bb.png",
+                        "desc": "arrow()",
+                        "move": 1
+                    }
+                ]
+            },
+            {
+                "id": "Decorations",
+                "name": "Decorations",
+                "path": "/static/images/icons/group_Decorations_3649.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "underline()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Decorations_underline_53fc.png",
+                        "desc": "underline()",
+                        "move": 1
+                    },
+                    {
+                        "code": "overline()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Decorations_overline_9708.png",
+                        "desc": "overline()",
+                        "move": 1
+                    },
+                    {
+                        "code": "underbrace()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Decorations_ubrace_8e51.png",
+                        "desc": "underbrace()",
+                        "move": 1
+                    },
+                    {
+                        "code": "overbrace()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Decorations_obrace_39b8.png",
+                        "desc": "overbrace()",
+                        "move": 1
+                    },
+                    {
+                        "code": "cancel()",
+                        "display": "",
+                        "path": "/static/images/icons/item_Decorations_cancel_56a4.png",
+                        "desc": "cancel()",
+                        "move": 1
+                    }
+                ]
+            },
+            {
+                "id": "Limits",
+                "name": "Limits",
+                "path": "/static/images/icons/group_Limits_b7a9.png",
+                "icon": "",
+                "items": [
+                    {
+                        "code": "lim",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_lim_f943.png",
+                        "desc": "lim",
+                        "move": 0
+                    },
+                    {
+                        "code": "max",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_max_d628.png",
+                        "desc": "max",
+                        "move": 0
+                    },
+                    {
+                        "code": "min",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_min_3c01.png",
+                        "desc": "min",
+                        "move": 0
+                    },
+                    {
+                        "code": "sup",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_sup_c97e.png",
+                        "desc": "sup",
+                        "move": 0
+                    },
+                    {
+                        "code": "inf",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_inf_acd0.png",
+                        "desc": "inf",
+                        "move": 0
+                    },
+                    {
+                        "code": "log",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_log_4292.png",
+                        "desc": "log",
+                        "move": 0
+                    },
+                    {
+                        "code": "ln",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_ln_94cd.png",
+                        "desc": "ln",
+                        "move": 0
+                    },
+                    {
+                        "code": "sin",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_sin_b238.png",
+                        "desc": "sin",
+                        "move": 0
+                    },
+                    {
+                        "code": "cos",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_cos_4746.png",
+                        "desc": "cos",
+                        "move": 0
+                    },
+                    {
+                        "code": "tan",
+                        "display": "",
+                        "path": "/static/images/icons/item_Limits_tan_1d7a.png",
+                        "desc": "tan",
+                        "move": 0
                     }
                 ]
             }
