@@ -32,8 +32,7 @@ export const showFlash = (message, category = 'info') => {
 /**
  * =================================================================
  * 1. Environment Controller
- * Manages environment switching (Passage/Inline/Interline), 
- * content storage, and placeholder updates.
+ * Manages environment switching (Passage/Inline/Interline), content storage, and placeholder updates.
  * =================================================================
  */
 export const EnvironmentController = {
