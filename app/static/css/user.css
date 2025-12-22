@@ -218,7 +218,7 @@ textarea.form-control {
 .env-badge.inline-formula { background-color: rgba(35, 157, 173, 0.15); color: #239DAD; }
 .env-badge.interline-formula { background-color: rgba(35, 157, 173, 0.15); color: #239DAD; }
 
-.timestamp {
+.timestamp-local {
     color: #999;
     font-size: 14px;
     font-weight: 700;

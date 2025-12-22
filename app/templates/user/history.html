@@ -15,7 +15,9 @@
                 <span class="env-badge {{ item.current_environment }}">
                     {{ item.current_environment.replace('-', ' ') | title }}
                 </span>
-                <span class="timestamp">{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                <span class="timestamp-local" data-utc="{{ item.created_at.strftime('%Y-%m-%dT%H:%M:%SZ') }}">
+                    {{ item.created_at.strftime('%Y-%m-%d %H:%M') }} (UTC)
+                </span>
             </div>
 
             <div class="card-body">
@@ -74,6 +76,26 @@ async function deleteHistoryItem(id) {
         console.error("Error:", error);
         alert("Network error.");
     }
-}
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+    const timestamps = document.querySelectorAll('.timestamp-local'); 
+    timestamps.forEach(span => {
+        const utcStr = span.getAttribute('data-utc');
+        if (utcStr) {
+            const date = new Date(utcStr);
+            const localStr = date.toLocaleString('zh-CN', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            span.textContent = localStr;
+            // console.log(`Converted UTC "${utcStr}" to Local "${localStr}"`);
+        }
+    });
+});
 </script>
 {% endblock %}
