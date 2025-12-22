@@ -23,10 +23,13 @@
                     <pre><code>{{ item.typst_code }}</code></pre>
                 </div>
 
-                <div class="svg-container">
-                    <div class="svg-placeholder">
-                        <span>SVG Preview Area</span>
-                    </div>
+                <div class="svg-container {{ item.current_environment }} ">
+                    <img 
+                        src="{{ url_for('main.compile_typst_history', history_id=item.id) }}" 
+                        alt="Rendered Typst Result"
+                        loading="lazy"
+                        class="rendered-svg"
+                    >
                 </div>
             </div>
 

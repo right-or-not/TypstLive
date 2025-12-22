@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 from datetime import datetime, timezone
 from app import db
 from app.models import User, CompilationHistory
-# from app.utils import compile_typst_to_image
+from app.compiler import TypstRealtimeCompiler
 
 
 # create blueprint of main routes
@@ -163,60 +163,27 @@ def compile_typst_history(history_id):
     if item.user_id != current_user.id:
         return "Unauthorized", 403
 
-    preamble = """
-#set page(width: auto, height: auto, margin: 10pt)
-#set text(size: 14pt)
-"""
-    full_code = ""
-    
-    if item.current_environment == 'passage':
-        full_code = f"{preamble}\n{item.typst_code}"
-    elif item.current_environment == 'inline-formula':
-        # 行内公式，两边加 $
-        full_code = f"{preamble}\n$ {item.typst_code} $"
-    elif item.current_environment == 'interline-formula':
-        # 行间公式，两边加 $，通常 Typst 会自动居中内容，
-        # 但我们这里的居中主要靠前端 CSS 控制 SVG 在容器中的位置
-        full_code = f"{preamble}\n$ {item.typst_code} $"
-    else:
-        full_code = f"{preamble}\n{item.typst_code}"
-
+    # three diff environments
+    code_content = item.typst_code
+    if item.current_environment == 'inline-formula':
+        code_content = f"${item.typst_code}$"
+    if item.current_environment == 'interline-formula':
+        code_content = f"$ {item.typst_code} $"
+        
     try:
-        # 2. 创建临时文件进行编译
-        with tempfile.NamedTemporaryFile(suffix=".typ", delete=False) as f_typ:
-            f_typ.write(full_code.encode('utf-8'))
-            typ_path = f_typ.name
-            
-        svg_path = typ_path.replace(".typ", ".svg")
-        
-        # 3. 调用 Typst CLI 编译 (确保服务器已安装 typst 命令行工具)
-        # --root . 确保能引用其他文件(如果有)
-        process = subprocess.run(
-            ["typst", "compile", typ_path, svg_path],
-            capture_output=True,
-            text=True
-        )
-        
-        if process.returncode != 0:
-            # 编译失败，返回错误 SVG 或 400
-            print(f"Compilation Error: {process.stderr}")
-            return Response('<svg height="30" width="200"><text x="0" y="15" fill="red">Error</text></svg>', mimetype='image/svg+xml')
-
-        # 4. 返回生成的 SVG 文件
-        return send_file(svg_path, mimetype='image/svg+xml')
-
+        with TypstRealtimeCompiler(user_id=current_user.id, session_id='history-compile') as compiler:
+            result = compiler.compile_to_svg(code_content)
+            if result['success']:
+                svg_data = result['svg']
+                return Response(svg_data, mimetype='image/svg+xml')
+            else:
+                print(f'[History Compile Error] {result["error"]}')
+                error_svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="200" height="30"><text x="0" y="20" fill="red" font-family="monospace">Compile Error</text></svg>'
+                return Response(error_svg, mimetype='image/svg+xml')
     except Exception as e:
-        print(f"Render Error: {e}")
-        return Response('<svg height="30" width="200"><text x="0" y="15" fill="red">Server Error</text></svg>', mimetype='image/svg+xml')
-    finally:
-        # 清理临时文件 (可选，Linux下 /tmp 通常会自动清理，但最好手动处理)
-        try:
-            if 'typ_path' in locals() and os.path.exists(typ_path):
-                os.remove(typ_path)
-            if 'svg_path' in locals() and os.path.exists(svg_path):
-                os.remove(svg_path)
-        except:
-            pass
+        print(f'[History Compile Error] {e}')
+        return Response('<svg><text>System Error</text></svg>', mimetype='image/svg+xml')
+        
 
 
 

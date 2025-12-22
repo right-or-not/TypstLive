@@ -3,7 +3,7 @@ import { CodeMirrorAPI } from './code-mirror.js';
 import { EditorAPI } from './editor.js';
 
 // Configuration
-const COMPILE_DELAY = 300; // Debounce delay in ms
+const COMPILE_DELAY = 0; // Debounce delay in ms
 
 // State
 let socket = null;

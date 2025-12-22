@@ -267,6 +267,35 @@ textarea.form-control {
     white-space: pre-wrap;
 }
 
+/* show svg */
+.svg-container {
+    width: 100%;
+    min-height: 100px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: auto;
+}
+
+.svg-container.interline-formula {
+    justify-content: center;
+}
+
+.svg-container.passage,
+.svg-container.inline-formula {
+    justify-content: flex-start;
+}
+
+.rendered-svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
 /* Footer of card */
 .card-footer {
     padding: 10px 20px;
