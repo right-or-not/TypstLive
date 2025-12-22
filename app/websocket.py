@@ -14,7 +14,6 @@ compilers = {}
 # {user_id: set(session_id_1, session_id_2, ...)}
 user_sessions = {}
 
-
 # SocketIO Runner  
 @socketio.on('connect')
 def handle_connect():
@@ -47,7 +46,6 @@ def handle_connect():
         'session_id': session_id,
         'active_connections': active_connections
     })
-
 
 @socketio.on('disconnect')
 def handle_disconnect():
