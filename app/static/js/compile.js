@@ -92,7 +92,7 @@ function initSocket() {
         }
         if (error.type) {
             console.error('Error Type:', error.type);
-    }
+        }
     });
     
     // 5. Disconnect
