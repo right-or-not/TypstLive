@@ -541,10 +541,10 @@ export const TOOLBOX_DATA = [
                         "move": 0
                     },
                     {
-                        "code": "circ",
+                        "code": "circle",
                         "display": "",
-                        "path": null,
-                        "desc": "circ",
+                        "path": "/static/images/icons/item_Operations_circle_941f.png",
+                        "desc": "circle",
                         "move": 0
                     },
                     {
